@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./pydzen.py | dzen2 -e 'button2=;' -h 16 -dock -ta l -title-name panel -fn "termsyn:pixelsize=12" -fg "#B0B0B0" -bg "#242424"

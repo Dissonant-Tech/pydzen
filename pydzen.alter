@@ -1,0 +1,177 @@
+#! /bin/python
+
+"""
+This is a Python implementation of a Dzen2 panel working
+with BSPWM.
+"""
+
+import os
+from multiprocessing import Process, Manager
+
+### CONFIGURATION OPTIONS ###
+FONT_FAMILY = 'sans-serif'
+FONT_SIZE = 12
+ADAPTIVE_CENTER = True
+SCREEN_WIDTH = int(os.popen("sres -W").read())
+
+###### COLOR OPTIONS #######
+FOREGROUND='#B0B0B0'
+BACKGROUND='#181818'
+FOCUSED_FG='#F1F0FF'
+FOCUSED_BG='#181818'
+FOCUSED_OCCUPIED_FG='#F1F0FF'
+FOCUSED_OCCUPIED_BG='#181818'
+FOCUSED_FREE_FG='#F1F0FF'
+FOCUSED_FREE_BG='#181818'
+FOCUSED_URGENT_FG='#34322E'
+FOCUSED_URGENT_BG='#181818'
+OCCUPIED_FG='#6699CC'
+OCCUPIED_BG='#181818'
+FREE_FG='#6699CC'
+FREE_BG='#181818'
+URGENT_FG='#F9A299'
+URGENT_BG='#34322E'
+LAYOUT_FG='#A3A6AB'
+LAYOUT_BG='#34322E'
+TITLE_FG='#C3C3E5'
+TITLE_BG='#181818'
+STATUS_FG='#C3C3E5'
+STATUS_BG='#181818'
+
+## CONFIGURATION DIRECTORY ##
+DIR  = os.environ['HOME'] + "/.config/bspwm/panel"
+FIFO = os.popen("cat /tmp/panel-fifo")
+
+# Window/Virtual-Desktop Icons
+ICO = "^i("+DIR+"/xbm/arch_10x10.xbm)"
+ICO_1 = "● "
+ICO_2 = "◎ "
+ICO_3 = "○ "
+ICO_4 = "◉ "
+
+
+
+class Panel(object):
+
+    """Represents a Dzen2 Panel"""
+
+    def __init__(self):
+        """Set defaults and start the dzen2 panel """
+        self._FIFO = Manager().Queue()
+
+        self._TITLE = ''
+        self._WM_INFO = ''
+        self._SYS_INFO = ''
+
+        self._LEFT_WIDTH = 0
+        self._RIGHT_WIDTH = 0
+        self._CENTER_WIDTH = 0
+        self._AVAIL_CENTER = 0
+
+        self._LEFT_INDENT = 0
+        self._RIGHT_INDENT = 0
+        self._CENTER_INDENT = 0
+
+        self._RIGHT = ""
+        self._LEFT = ""
+        self._CENTER = ""
+
+        self._FINAL_STR = ""
+
+        self.go()
+    
+    def bspc_subscribe(self):
+        bspc_proc = os.popen("bspc control --subscribe")
+        while(True):
+            self._FIFO.put(bspc_proc.readline())
+
+    def xtitle_subscribe(self):
+        xtitle_proc = os.popen("xtitle -sf 'T%s'")
+        while(True):
+            self._FIFO.put(xtitle_proc.readline())
+
+    def go(self):
+        bspc_proc = Process(target=self.bspc_subscribe)
+        bspc_proc.daemon = True
+        bspc_proc.start()
+
+        while (True):
+            self.read()
+            self.setSize()
+            self.concat()
+
+    def read(self):
+        ln = self._FIFO.get()
+
+        if ln.startswith("T"):
+            TITLE = "^fg("+TITLE_FG+")^bg("+TITLE_BG+") "+ln[1:]+" ^fg()^bg()"
+        elif ln.startswith("W"):
+            WM = ln.split(":")
+            WM.remove(WM[0])
+            WM.remove(WM[-1])
+            self._WM_INFO = self.setWM_INFO(WM)
+        
+    # Returns the size in pixels(int), of a text
+    def getWidth(self, text):
+        width = os.popen("echo '"+str(text)+"' | xargs -0 txtw -f "+str(FONT_FAMILY)+" -s "+str(FONT_SIZE)).read()
+        if width is not '':
+            return int(width)
+        else:
+            return 0
+
+    def setWM_INFO(self, wm):
+        result = ""
+        for w in wm:
+            if w.startswith("O"):
+                result = result+"^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")^ca(1, bspc desktop -f"+w[-1]+")^ca(2, bspc window -d "+w[-1]+") "+ICO_1+"^ca()^fg()^bg()"
+            elif w.startswith("F"):
+                result = result+"^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")^ca(1, bspc desktop -f"+w[-1]+")^ca(2, bspc window -d "+w[-1]+") "+ICO_1+"^ca()^fg()^bg()"
+            elif w.startswith("U"):
+                result = result+"^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")^ca(1, bspc desktop -f"+w[-1]+")^ca(2, bspc window -d "+w[-1]+") "+ICO_1+"^ca()^fg()^bg()"
+            elif w.startswith("o"):
+                result = result+"^fg("+FREE_FG+")^bg("+FREE_BG+")^ca(1, bspc desktop -f"+w[-1]+")^ca(2, bspc window -d "+w[-1]+") "+ICO_2+"^ca()^fg()^bg()"
+            elif w.startswith("f"):
+                result = result+"^fg("+FREE_FG+")^bg("+FREE_BG+")^ca(1, bspc desktop -f"+w[-1]+")^ca(2, bspc window -d "+w[-1]+") "+ICO_3+"^ca()^fg()^bg()"
+            elif w.startswith("u"):
+                result = result+"^fg("+URGENT_FG+")^bg("+URGENT_BG+")^ca(1, bspc desktop -f"+w[-1]+")^ca(2, bspc window -d "+w[-1]+") "+ICO_4+"^ca()^fg()^bg()"
+
+        return result
+
+    def setSize(self):
+
+        if self._WM_INFO == '':
+            self._LEFT_WIDTH = 0
+        else:
+            self._LEFT_WIDTH = self.getWidth(self._WM_INFO)
+        if self._TITLE == '':
+            self._CENTER_WIDTH = 0
+        else:
+            self._CENTER_WIDTH = self.getWidth(self._TITLE)
+        if self._SYS_INFO == '':
+            self._RIGHT_WIDTH = 0
+        else:
+            self._RIGHT_WIDTH = self.getWidth(self._SYS_INFO)
+
+        self._LEFT_INDENT = 0
+        self._RIGHT_INDENT = int(SCREEN_WIDTH - self._RIGHT_WIDTH)
+        self._AVAIL_CENTER = int(SCREEN_WIDTH - (self._LEFT_WIDTH + self._RIGHT_WIDTH))
+        if self._AVAIL_CENTER < self._CENTER_WIDTH:
+            self._CENTER_INDENT = self._LEFT_INDENT + self._LEFT_WIDTH
+        else:
+            if ADAPTIVE_CENTER:
+                self._CENTER_INDENT = (self._LEFT_WIDTH + (self._AVAIL_CENTER - self._CENTER_WIDTH)/2)
+            else:
+                self._CENTER_INDENT = (SCREEN_WIDTH - self._CENTER_WIDTH)/2
+
+        self._LEFT = "^pa("+str(self._LEFT_INDENT)+")"
+        self._CENTER = "^pa("+str(self._CENTER_INDENT)+")"
+        self._RIGHT = "^pa("+str(self._RIGHT_INDENT)+")"
+
+    def concat(self):
+        print('"'+ICO+self._LEFT+self._WM_INFO+self._CENTER+self._TITLE+self._SYS_INFO+'"')
+            
+
+
+if __name__ == '__main__':
+    dzenPanel = Panel()
+    dzenPanel.go();
