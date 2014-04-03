@@ -28,6 +28,7 @@ import logging
 import traceback
 from multiprocessing import Process, Queue
 from optparse import OptionParser
+from log.multiprocessinglog import MultiProcessingLog
 
 class utils(object):
     @staticmethod
@@ -262,9 +263,11 @@ def load_plugins():
     return plugins
 
 def init_logger():
+    #mplog = MultiProcessingLog(os.path.join(os.environ.get('HOME'), '.pydzen/log/logs'), 'a', 0, 0)
+    #return logging.getLogger().addHandler(mplog)
     logging.basicConfig(level = config.LOGLEVEL,
-            format = '%(asctime)s %(name)-8s %(levelname)-6s %(message)s',
-            filename = os.path.join(os.environ.get('HOME'), '.pydzen/log/logs'))
+            format = '%(asctime)s %(name)-8s %(levelname)-6s %(messages)s',
+            filename = os.path.join(os.environ.get('HOME'), '.pydzen/log/pydzenLogs'))
 
 def init_template():
     t = {}
@@ -354,9 +357,9 @@ def display(template):
 config = configure()
 
 if __name__ == '__main__':
+    #logger = init_logger()
     init_logger()
     logger = logging.getLogger('pydzen')
-
     plugins = load_plugins()
 
     #dzen = utils.dzen(xs = 0)
