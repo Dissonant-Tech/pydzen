@@ -61,7 +61,7 @@ def update(queue):
             # lqbar = utils.gdbar('%s %s' % (lq['val'][0], lq['max'][0]), sw = 1, ss = 1, w = 15 )
             queue.put({ 'plugins.wlan': '^i(%s) %s' % (os.path.join(config.ICON_PATH, ICON_WIFI), ESSID)})
         except Exception as e:
-            logger.warn(e)
+            logger.error(e)
 
         time.sleep(TIMEOUT)
 

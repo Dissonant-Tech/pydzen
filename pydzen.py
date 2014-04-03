@@ -263,7 +263,8 @@ def load_plugins():
 
 def init_logger():
     logging.basicConfig(level = config.LOGLEVEL,
-            format = '%(asctime)s %(name)-8s %(levelname)-6s %(message)s')
+            format = '%(asctime)s %(name)-8s %(levelname)-6s %(message)s',
+            filename = os.path.join(os.environ.get('HOME'), '.pydzen/log'))
 
 def init_template():
     t = {}
@@ -326,6 +327,9 @@ def configure():
 def print_line(f, out):
     f.stdin.write(bytes(out+'\n', "UTF-8"))
 
+def get_size(text):
+    return subprocess.check_output(['textwidth', "'-*-Monaco-medium-r-*-*-9-120-*-*-*-*-*-*'", "'"+text+"'"])
+
 def display(template):
     left = ''
     center = ''
@@ -335,21 +339,17 @@ def display(template):
     center = config.JOINTS.join(filter(None, template['CENTER']))
     right = config.JOINTS.join(filter(None, template['RIGHT']))
 
-    left = '^p(_LEFT)' + left + '^p()'
-    center = '^p(_CENTER)' + center + '^p()'
-    right = '^p(_RIGHT)^p(-'+get_length(right)+')' + right
+    #left = '^p(_LEFT)' + left + '^p()'
+    #center = '^p(_CENTER)' + center + '^p()'
+    #right = '^p(_RIGHT)'+'^p('+get_size(right)+')'+right
 
 
-    result = left+center+right+'\n'
-    #result = right
+    result = left+center+right
 
     logger.debug("result: " + result)
 
-    #print(result+"\n")
     sys.stdout.write(result+'\n')
     sys.stdout.flush()
-
-    #print_line(dzen, result + '\n')
 
 config = configure()
 
@@ -393,10 +393,10 @@ if __name__ == '__main__':
     except IOError as e:
         try:
             logger.error(dzen.stderr.read())
-            logger.error(traceback.print_exception())
+            logger.exception(se)
         except Exception as se:
-            logger.error(se)
-            logger.error(traceback.print_exception())
+            logger.exception(se)
     except KeyboardInterrupt:
         for p in procs:
             p.terminate()
+        logging.shutdown()
