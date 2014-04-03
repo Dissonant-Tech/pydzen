@@ -264,7 +264,7 @@ def load_plugins():
 def init_logger():
     logging.basicConfig(level = config.LOGLEVEL,
             format = '%(asctime)s %(name)-8s %(levelname)-6s %(message)s',
-            filename = os.path.join(os.environ.get('HOME'), '.pydzen/log'))
+            filename = os.path.join(os.environ.get('HOME'), '.pydzen/log/logs'))
 
 def init_template():
     t = {}
