@@ -5,7 +5,7 @@
 # NOTE: Must be the name of a .py file in the plugins folder,
 # NOT necessarily a plugin itself.
 # (i.e bspwm.py contains both title,and pager plugins)
-PLUGINS = ['plugins.bspwm','plugins.wlan','plugins.volume','plugins.timer']
+PLUGINS = ['plugins.bspwm','plugins.title','plugins.wlan','plugins.volume','plugins.timer']
 
 # The order and position you want the plugins to appear in
 ORDER = dict(
@@ -57,7 +57,7 @@ GDBAR_OPTIONS = dict(fg = FG_COLOR,
                      nonl = True)
 
 # plugin output separator
-JOINTS = '  ^fg(grey60)^r(1x8)^fg()  '
+JOINTS = '  '
 
 # path to where our icons are located
 ICON_PATH = '/home/dissonance/.pydzen/xbm/'

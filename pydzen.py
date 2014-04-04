@@ -342,8 +342,8 @@ def display(template):
     center = config.JOINTS.join(filter(None, template['CENTER']))
     right = config.JOINTS.join(filter(None, template['RIGHT']))
 
-    #left = '^p(_LEFT)' + left + '^p()'
-    #center = '^p(_CENTER)' + center + '^p()'
+    left = '^p(_LEFT)' + left
+    center = '^p(_CENTER)' + center
     #right = '^p(_RIGHT)'+'^p('+get_size(right)+')'+right
 
 
