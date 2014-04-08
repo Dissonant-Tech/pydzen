@@ -47,12 +47,17 @@ def update(queue):
             icon = ICON_AC
 
             ac_vals = bool(int(open(os.path.join(AC, 'online')).read()))
+            #ac_vals = bool(int(open(os.path.join(AC, 'online')).read()))
 
-            lastfull = int(open(os.path.join(BAT, 'charge_full')).read())
-            remain = int(open(os.path.join(BAT, 'charge_now')).read())
+            lastfull = int(open(os.path.join(BAT, 'energy_full')).read())
+            remain = int(open(os.path.join(BAT, 'energy_now')).read())
             rate = int(open(os.path.join(BAT, 'voltage_now')).read())
 
-            percent = (100. / lastfull * remain)
+            #lastfull = int(open(os.path.join(BAT, 'charge_full')).read())
+            #remain = int(open(os.path.join(BAT, 'charge_now')).read())
+            #rate = int(open(os.path.join(BAT, 'voltage_now')).read())
+
+            percent = int(100 / lastfull * remain)
             if percent < 25:
                 fg_color = config.FG_COLOR_URGENT
                 icon = os.path.join(config.ICON_PATH, 'bat_empty_01.xbm')
@@ -72,7 +77,7 @@ def update(queue):
 
             queue.put({ 'plugins.battery': '^fg(%s)^i(%s) %s^fg()' % (fg_color, icon, percent)})
             # return '^fg(%s)^i(%s)^fg()' % (fg_color, icon)
-            
+
             time.sleep(4)
     except Exception as e:
         logger.exception(e)

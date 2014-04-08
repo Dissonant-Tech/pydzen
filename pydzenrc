@@ -5,7 +5,7 @@
 # NOTE: Must be the name of a .py file in the plugins folder,
 # NOT necessarily a plugin itself.
 # (i.e bspwm.py contains both title,and pager plugins)
-PLUGINS = ['plugins.bspwm','plugins.title','plugins.wlan','plugins.volume','plugins.timer']
+PLUGINS = ['plugins.bspwm','plugins.title','plugins.wlan','plugins.volume','plugins.battery','plugins.timer']
 
 # The order and position you want the plugins to appear in
 ORDER = dict(
@@ -25,7 +25,8 @@ ORDER = dict(
             )
 FONT = 'termsyn'
 FONT_FAMILY = 'termsyn'
-FONT_SIZE = '12'
+FONT_TYPE = 'terminess'
+FONT_SIZE = '10'
 
 FG_COLOR = '#B0B0B0'                # default foreground color
 BG_COLOR = '#484848'                # default background color

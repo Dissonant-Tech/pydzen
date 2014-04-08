@@ -331,7 +331,8 @@ def print_line(f, out):
     f.stdin.write(bytes(out+'\n', "UTF-8"))
 
 def get_size(text):
-    return subprocess.check_output(['textwidth', "'-*-Monaco-medium-r-*-*-9-120-*-*-*-*-*-*'", "'"+text+"'"])
+    # FIXME config.FONT_* may not be what dzen is actually using
+    return subprocess.check_output(['txtw', '-f', config.FONT_TYPE, '-s', config.FONT_SIZE, text])
 
 def display(template):
     left = ''
@@ -342,9 +343,9 @@ def display(template):
     center = config.JOINTS.join(filter(None, template['CENTER']))
     right = config.JOINTS.join(filter(None, template['RIGHT']))
 
-    left = '^p(_LEFT)' + left
-    center = '^p(_CENTER)' + center
-    #right = '^p(_RIGHT)'+'^p('+get_size(right)+')'+right
+    left = '^p(_LEFT)'+left
+    center = '^p(_CENTER)^p(-'+str(get_size(center))+')'+center
+    right = '^p(_RIGHT)^p(-'+str(205)+')'+right
 
 
     result = left+center+right

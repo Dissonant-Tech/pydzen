@@ -12,7 +12,12 @@ def update(queue):
 
         while True:
             line = sub.stdout.readline()
+            
+            # FIXME for some reason decoding the bytes will makes line = None
+            # but straight conversion to string leaves b'title...\n'
             line = str(line)
+            line = line[2:-3]
+
             title = (line[:45]+'...') if len(line) > 45 else line
             queue.put({'plugins.title': title})
     except Exception as e:
