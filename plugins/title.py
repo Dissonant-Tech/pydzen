@@ -13,7 +13,7 @@ def update(queue):
         while True:
             line = sub.stdout.readline()
             
-            # FIXME for some reason decoding the bytes will makes line = None
+            # FIXME for some reason decoding the bytes makes line = None
             # but straight conversion to string leaves b'title...\n'
             line = str(line)
             line = line[2:-3]

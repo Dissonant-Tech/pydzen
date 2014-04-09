@@ -226,17 +226,6 @@ class utils(object):
             return nfunc
         return wrapper
 
-def get_length(text):
-    """
-    Returns the length of text in pixels
-    """
-    #width = os.popen("echo '"+str(text)+"' | xargs -0 txtw -f sans -s 12").read()
-    width = (len(text))
-    if width is not '' or 0:
-        return str(width)
-    else:
-        return '0'
-
 def load_plugins():
     """
     try to load plugins from 'config.PLUGIN_DIR'.
@@ -332,7 +321,8 @@ def print_line(f, out):
 
 def get_size(text):
     # FIXME config.FONT_* may not be what dzen is actually using
-    return subprocess.check_output(['txtw', '-f', config.FONT_TYPE, '-s', config.FONT_SIZE, text])
+    size = bytes.decode(subprocess.check_output(['txtw', '-f', config.FONT_TYPE, '-s', config.FONT_SIZE, text]))
+    return size.strip('\n')
 
 def display(template):
     left = ''
@@ -344,8 +334,8 @@ def display(template):
     right = config.JOINTS.join(filter(None, template['RIGHT']))
 
     left = '^p(_LEFT)'+left
-    center = '^p(_CENTER)^p(-'+str(get_size(center))+')'+center
-    right = '^p(_RIGHT)^p(-'+str(205)+')'+right
+    center = '^p(_CENTER)^p(-'+str(int(get_size(center))/2)+')'+center+'^p()'
+    right = '^p(_RIGHT)^p(-205)'+right
 
 
     result = left+center+right
@@ -358,7 +348,6 @@ def display(template):
 config = configure()
 
 if __name__ == '__main__':
-    #logger = init_logger()
     init_logger()
     logger = logging.getLogger('pydzen')
     plugins = load_plugins()

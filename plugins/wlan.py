@@ -65,3 +65,5 @@ def update(queue):
 
         time.sleep(TIMEOUT)
 
+def onClick():
+    return 'home/dissonance/.pydzen/plugins/scripts/dzen_network.sh'
