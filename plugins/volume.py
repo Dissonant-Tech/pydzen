@@ -37,18 +37,14 @@ def update(queue):
             VOL = re.findall(r'\[(.+?)\]',VOL)
 
             if VOL[2] == 'off':
-                queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'volume0.xbm', VOL[0])})
+                queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'vol3.xbm', VOL[0])})
             else:
-                if int(VOL[0].strip('%')) >= 95:
-                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'volume100.xbm', VOL[0])})
-                elif int(VOL[0].strip('%')) >= 75:
-                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'volume75.xbm', VOL[0])})
-                elif int(VOL[0].strip('%')) >= 50:
-                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'volume50.xbm', VOL[0])})
-                elif int(VOL[0].strip('%')) >= 25:
-                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'volume25.xbm', VOL[0])})
+                if int(VOL[0].strip('%')) >= 40:
+                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'vol1.xbm', VOL[0])})
+                elif int(VOL[0].strip('%')) > 0:
+                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'vol2.xbm', VOL[0])})
                 else:
-                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'volume0.xbm', VOL[0])})
+                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'vol3.xbm', VOL[0])})
 
             time.sleep(TIMEOUT)
 

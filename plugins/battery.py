@@ -32,7 +32,7 @@ BAT = '/sys/class/power_supply/BAT1'
 AC = '/sys/class/power_supply/ACAD'
 
 ICON_BAT = os.path.join(config.ICON_PATH, 'bat_full_01.xbm')
-ICON_AC = os.path.join(config.ICON_PATH, 'ac_01.xbm')
+ICON_AC = os.path.join(config.ICON_PATH, 'ac15.xbm')
 # ------- user config ----------------------------------------------------------
 
 RE_FULL_CAPACITY = re.compile(r'^last full capacity:\s+(?P<lastfull>\d+).*$')
