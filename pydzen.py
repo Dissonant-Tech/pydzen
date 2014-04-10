@@ -252,8 +252,6 @@ def load_plugins():
     return plugins
 
 def init_logger():
-    #mplog = MultiProcessingLog(os.path.join(os.environ.get('HOME'), '.pydzen/log/logs'), 'a', 0, 0)
-    #return logging.getLogger().addHandler(mplog)
     logging.basicConfig(level = config.LOGLEVEL,
             format = '%(asctime)s %(name)-8s %(levelname)-6s %(messages)s',
             filename = os.path.join(os.environ.get('HOME'), '.pydzen/log/pydzenLogs'))
@@ -351,8 +349,6 @@ if __name__ == '__main__':
     init_logger()
     logger = logging.getLogger('pydzen')
     plugins = load_plugins()
-
-    #dzen = utils.dzen(xs = 0)
 
     queue = Queue()
     procs = []
