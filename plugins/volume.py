@@ -27,15 +27,16 @@ ICON_VOL = config.ICON_PATH+'volume0.xbm'
 logger = logging.getLogger('plugins.volume')
 
 def updateVOL(queue):
-    HEADPHONE = str(subprocess.check_output(['amixer', '-c', '0', 'contents',
-                                        '|', 'grep', '17']))
+    AMIXER = subprocess.Popen(['amixer', '-c', '0', 'contents'], stdout = subprocess.PIPE)
+    HEADPHONE = subprocess.Popen(['grep', '17','-A', '2'], stdin=AMIXER.stdout, stdout = subprocess.PIPE)
+    AMIXER.stdout.close()
 
     VOL = str(subprocess.check_output(['amixer', 'get', 'Master']))
     VOL = re.findall(r'\[(.+?)\]',VOL)
 
     if VOL[2] == 'off':
         ICON_VOL = config.ICON_PATH+'vol3.xbm'
-    elif 'values=on' in HEADPHONE:
+    elif 'values=on' in HEADPHONE.communicate()[0].decode():
         ICON_VOL = config.ICON_PATH+'headphone1.xbm'
     else:
         if int(VOL[0].strip('%')) >= 40:
@@ -45,6 +46,7 @@ def updateVOL(queue):
         else:
             ICON_VOL = config.ICON_PATH+'vol3.xbm'
 
+    HEADPHONE.stdout.close()
     queue.put({'plugins.volume': '^i(%s) %s' % (ICON_VOL, VOL[0])})
 
 def update(queue):

@@ -319,6 +319,7 @@ def print_line(f, out):
 
 def get_size(text):
     # FIXME config.FONT_* may not be what dzen is actually using
+    re.compile('')
     size = bytes.decode(subprocess.check_output(['txtw', '-f', config.FONT_TYPE, '-s', config.FONT_SIZE, text]))
     return size.strip('\n')
 
@@ -333,7 +334,7 @@ def display(template):
 
     left = '^p(_LEFT)'+left
     center = '^p(_CENTER)^p(-'+str(int(get_size(center))/2)+')'+center+'^p()'
-    right = '^p(_RIGHT)^p(-205)'+right
+    right = '^p(_RIGHT)^p(-230)'+right
 
 
     result = left+center+right

@@ -61,21 +61,24 @@ def update(queue):
             if percent < 25:
                 fg_color = config.FG_COLOR_URGENT
                 icon = os.path.join(config.ICON_PATH, 'bat_empty_01.xbm')
+                fg_color = '#FF3300'
             elif percent < 50:
                 fg_color = config.FG_COLOR_NOTICE
                 icon = os.path.join(config.ICON_PATH, 'bat_low_01.xbm')
+                fg_color = ' '
 
             bat = utils.gdbar('%s %s' % (remain, lastfull), l = '%d%% ' % percent)
 
             ac = ''
-            if not ac_vals and rate > 0:
+            if ac_vals:
                 mins = (3600.0 * (float(remain) / float(rate))) / 60.0
                 hours = math.floor(mins / 60.0)
                 mins = math.floor(mins - (hours * 60.0))
                 ac = ' %02d:%02d' % (hours, mins)
-                icon = ICON_BAT
+                icon = ICON_AC
+                fg_color = '#FFFFFF'
 
-            queue.put({ 'plugins.battery': '^i(%s) %s' % (icon, percent)})
+            queue.put({ 'plugins.battery': '^fg(%s)^i(%s)^fg() %s' % (fg_color, icon, percent)})
 
             time.sleep(4)
     except Exception as e:
