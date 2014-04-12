@@ -75,8 +75,7 @@ def update(queue):
                 ac = ' %02d:%02d' % (hours, mins)
                 icon = ICON_BAT
 
-            queue.put({ 'plugins.battery': '^fg(%s)^i(%s) %s^fg()' % (fg_color, icon, percent)})
-            # return '^fg(%s)^i(%s)^fg()' % (fg_color, icon)
+            queue.put({ 'plugins.battery': '^i(%s) %s' % (icon, percent)})
 
             time.sleep(4)
     except Exception as e:
