@@ -75,21 +75,23 @@ values in `pydzenrc`.
 from pydzen import config, utils
 
 def update(queue):
-    queue.put({'plugins.myplugin': Output})
+    output = 'dzen formated outout here'
+    queue.put({'plugins.myplugin': output})
 
 ```
 
 Now you must add `plugins.myplugin` to `pydzenrc`
 
 ```python
+
 # plugins to load, in no particular order 
 PLUGINS = ['plugins.volume','plugins.myplugin']
 
 # order in which to put queue output
 ORDER = dict (
                 LEFT = [],
-                CENTER = [plugins.myplugin],
-                RIGHT = [plugins.volume],
+                CENTER = ['plugins.myplugin'],
+                RIGHT = ['plugins.volume'],
                 )
 ```
 
@@ -100,3 +102,4 @@ of the file inside of the plugin folder, in `ORDER` you must use the name of the
 returns to `queue`. 
 For an example you can look at the `bspwm.py` plugin, which returns both `plugins.logo` and `plugins.pager`
 to the queue.
+
