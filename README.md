@@ -52,3 +52,51 @@ A very simple example would be something like:
     queue, updates
     accordingly
 ```
+
+Adding your own plugin
+======================
+
+First, you would add your plugin to the plugin directory.
+
+```
+cd .pydzen
+touch plugin/myplugin.py
+```
+
+Your plugin **must** contain an update method that takes one argument named queue, your output must be sent
+as a dictionary object to the queue variable as shown below. If your plugin has no output, maybe it's acting
+as a backend to another plugin, you dont need to put anything into the queue, but do still need to add it to 
+pydzenrc as shown below.
+Your plugin may optionally import config and utils from pydzen. This will let you read
+values in `pydzenrc`.
+
+`myplugin.py`
+```python
+from pydzen import config, utils
+
+def update(queue):
+    queue.put({'plugins.myplugin': Output})
+
+```
+
+Now you must add `plugins.myplugin` to `pydzenrc`
+
+```python
+# plugins to load, in no particular order 
+PLUGINS = ['plugins.volume','plugins.myplugin']
+
+# order in which to put queue output
+ORDER = dict (
+                LEFT = [],
+                CENTER = [plugins.myplugin],
+                RIGHT = [plugins.volume],
+                )
+```
+
+Thats it!
+
+One final thing to note, while in the `PLUGINS` variable inside of `pydzenrc` you must use the name
+of the file inside of the plugin folder, in `ORDER` you must use the name of the dictionary key it
+returns to `queue`. 
+For an example you can look at the `bspwm.py` plugin, which returns both `plugins.logo` and `plugins.pager`
+to the queue.
