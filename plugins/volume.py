@@ -19,40 +19,47 @@ import logging
 import subprocess
 import re
 import time
-
-TIMEOUT = 3
-
 from pydzen import config, utils
 
 
+TIMEOUT = 3
 ICON_VOL = config.ICON_PATH+'volume0.xbm'
 logger = logging.getLogger('plugins.volume')
 
+def updateVOL(queue):
+    HEADPHONE = str(subprocess.check_output(['amixer', '-c', '0', 'contents',
+                                        '|', 'grep', '17']))
+
+    VOL = str(subprocess.check_output(['amixer', 'get', 'Master']))
+    VOL = re.findall(r'\[(.+?)\]',VOL)
+
+    if VOL[2] == 'off':
+        ICON_VOL = config.ICON_PATH+'vol3.xbm'
+    elif 'values=on' in HEADPHONE:
+        ICON_VOL = config.ICON_PATH+'headphone1.xbm'
+    else:
+        if int(VOL[0].strip('%')) >= 40:
+            ICON_VOL = config.ICON_PATH+'vol1.xbm'
+        elif int(VOL[0].strip('%')) > 0:
+            ICON_VOL = config.ICON_PATH+'vol2.xbm'
+        else:
+            ICON_VOL = config.ICON_PATH+'vol3.xbm'
+
+    queue.put({'plugins.volume': '^i(%s) %s' % (ICON_VOL, VOL[0])})
 
 def update(queue):
-    while True:
-        try:
-            HEADPHONE = str(subprocess.check_output(['amixer', '-c', '0', 'contents',
-                                                '|', 'grep', '17']))
-
-            VOL = str(subprocess.check_output(['amixer', 'get', 'Master']))
-            VOL = re.findall(r'\[(.+?)\]',VOL)
-
-            if VOL[2] == 'off':
-                ICON_VOL = config.ICON_PATH+'vol3.xbm'
-            elif 'values=on' in HEADPHONE:
-                ICON_VOL = config.ICON_PATH+'headphone1.xbm'
-            else:
-                if int(VOL[0].strip('%')) >= 40:
-                    ICON_VOL = config.ICON_PATH+'vol1.xbm'
-                elif int(VOL[0].strip('%')) > 0:
-                    ICON_VOL = config.ICON_PATH+'vol2.xbm'
-                else:
-                    ICON_VOL = config.ICON_PATH+'vol3.xbm'
-
-            queue.put({'plugins.volume': '^i(%s) %s' % (ICON_VOL, VOL[0])})
-
+    try:
+        updateVOL(queue)
+        # if user has not set sxhkd fifo use a timer to update volume
+        if os.environ.get('SXHKD_FIFO'):
+            # read the sxhkd fifo
+            sub = subprocess.Popen(['cat', os.environ.get('SXHKD_FIFO')], stdout=subprocess.PIPE)
+            while True:
+                line = sub.stdout.readline().decode()
+                if line.startswith('HXF86Audio'):
+                    updateVOL(queue)
+        else:
+            updateVOL(queue)
             time.sleep(TIMEOUT)
-
-        except Exception as e:
-            logger.warn(e)
+    except Exception as e:
+        logger.exception(e)
