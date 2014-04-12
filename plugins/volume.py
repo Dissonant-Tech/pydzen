@@ -26,25 +26,31 @@ from pydzen import config, utils
 
 
 ICON_VOL = config.ICON_PATH+'volume0.xbm'
-
 logger = logging.getLogger('plugins.volume')
 
 
 def update(queue):
     while True:
         try:
+            HEADPHONE = str(subprocess.check_output(['amixer', '-c', '0', 'contents',
+                                                '|', 'grep', '17']))
+
             VOL = str(subprocess.check_output(['amixer', 'get', 'Master']))
             VOL = re.findall(r'\[(.+?)\]',VOL)
 
             if VOL[2] == 'off':
-                queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'vol3.xbm', VOL[0])})
+                ICON_VOL = config.ICON_PATH+'vol3.xbm'
+            elif 'values=on' in HEADPHONE:
+                ICON_VOL = config.ICON_PATH+'headphone1.xbm'
             else:
                 if int(VOL[0].strip('%')) >= 40:
-                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'vol1.xbm', VOL[0])})
+                    ICON_VOL = config.ICON_PATH+'vol1.xbm'
                 elif int(VOL[0].strip('%')) > 0:
-                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'vol2.xbm', VOL[0])})
+                    ICON_VOL = config.ICON_PATH+'vol2.xbm'
                 else:
-                    queue.put({ 'plugins.volume': '^i(%s) %s' % (config.ICON_PATH+'vol3.xbm', VOL[0])})
+                    ICON_VOL = config.ICON_PATH+'vol3.xbm'
+
+            queue.put({'plugins.volume': '^i(%s) %s' % (ICON_VOL, VOL[0])})
 
             time.sleep(TIMEOUT)
 
