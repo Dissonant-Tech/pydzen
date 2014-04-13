@@ -44,7 +44,7 @@ def update(queue):
     try:
         while True:
             fg_color = config.FG_COLOR
-            icon = ICON_AC
+            icon = os.path.join(config.ICON_PATH, 'bat_full_01.xbm')
 
             ac_vals = bool(int(open(os.path.join(AC, 'online')).read()))
             #ac_vals = bool(int(open(os.path.join(AC, 'online')).read()))
