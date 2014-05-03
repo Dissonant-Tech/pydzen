@@ -1,9 +1,11 @@
 import os
 import sys
-import logging
+from log.centrallogger import Logger
 import subprocess
 
-logger = logging.getLogger('plugins.title')
+from pydzen import config, utils
+
+logger = Logger(config.LOG_QUEUE)
 
 def update(queue):
     try:

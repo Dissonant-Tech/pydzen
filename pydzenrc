@@ -70,4 +70,7 @@ GDBAR = 'gdbar'
 
 # set default log level
 import logging
+from multiprocessing import Queue
+
+LOG_QUEUE = Queue()
 LOGLEVEL = logging.WARN

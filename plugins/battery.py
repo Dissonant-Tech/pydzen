@@ -19,13 +19,13 @@
 
 import os
 import re
-import logging
+from log.centrallogger import Logger
 import math
 import time
 
 from pydzen import config, utils
 
-logger = logging.getLogger('plugins.battery')
+logger = Logger(config.LOG_QUEUE)
 
 # ------- user config ----------------------------------------------------------
 BAT = '/sys/class/power_supply/BAT1'

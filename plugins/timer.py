@@ -19,12 +19,12 @@
 
 import time
 import datetime
-import logging
+from log.centrallogger import Logger
 import os
 
 from pydzen import config, utils
 
-logger = logging.getLogger('plugins.timer')
+logger = Logger(config.LOG_QUEUE)
 
 ICON = os.path.join(config.ICON_PATH, 'clock.xbm')
 TIMEOUT = 2

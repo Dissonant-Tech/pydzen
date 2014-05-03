@@ -16,7 +16,7 @@
 
 import os
 import re
-import logging
+from log.centrallogger import Logger
 import subprocess
 import time
 
@@ -28,7 +28,7 @@ IFACE = 'wlp3s0'
 TIMEOUT = 4
 # ------- user config ----------------------------------------------------------
 
-logger = logging.getLogger('plugins.wlan')
+logger = Logger(config.LOG_QUEUE)
 
 def update(queue):
     while True:

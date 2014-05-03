@@ -15,7 +15,7 @@
 # vim:syntax=python:sw=4:ts=4:expandtab
 
 import os
-import logging
+from log.centrallogger import Logger
 import subprocess
 import re
 import time
@@ -24,7 +24,7 @@ from pydzen import config, utils
 
 TIMEOUT = 3
 ICON_VOL = config.ICON_PATH+'volume0.xbm'
-logger = logging.getLogger('plugins.volume')
+logger = Logger(config.LOG_QUEUE)
 
 def updateVOL(queue):
     AMIXER = subprocess.Popen(['amixer', '-c', '0', 'contents'], stdout = subprocess.PIPE)

@@ -28,7 +28,7 @@ import logging
 import traceback
 from multiprocessing import Process, Queue
 from optparse import OptionParser
-from log.multiprocessinglog import MultiProcessingLog
+from log.centrallogger import CentralLogger, Logger
 
 class utils(object):
     @staticmethod
@@ -233,7 +233,7 @@ def load_plugins():
     each plugin must define an 'update' method, which returns either a string, an array
     of strings or None.
     """
-    logger = logging.getLogger('pydzen')
+    logger = Logger(config.LOG_QUEUE)
 
     sys.path.insert(0, os.path.expanduser(config.PLUGIN_DIR))
     plugins = []
@@ -250,11 +250,6 @@ def load_plugins():
             logger.error('error loading plugin "%s": %s' % (p, e))
     sys.path = sys.path[1:]
     return plugins
-
-def init_logger():
-    logging.basicConfig(level = config.LOGLEVEL,
-            format = '%(asctime)s %(name)-8s %(levelname)-6s %(messages)s',
-            filename = os.path.join(os.environ.get('HOME'), '.pydzen/log/pydzenLogs'))
 
 def init_template():
     t = {}
@@ -347,8 +342,11 @@ def display(template):
 config = configure()
 
 if __name__ == '__main__':
-    init_logger()
-    logger = logging.getLogger('pydzen')
+    logger_proc = CentralLogger(config.LOG_QUEUE)
+    logger_proc.start()
+
+    logger = Logger(config.LOG_QUEUE)
+    logger.debug("THIS IS A TEST")
     plugins = load_plugins()
 
     queue = Queue()
@@ -389,4 +387,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         for p in procs:
             p.terminate()
-        logging.shutdown()
+        logger.quit()

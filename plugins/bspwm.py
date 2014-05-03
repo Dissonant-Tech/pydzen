@@ -1,13 +1,13 @@
 import os
 import sys
-import logging
+from log.centrallogger import Logger
 import traceback
 import subprocess
 
 from pydzen import config, utils
 
 
-logger = logging.getLogger('plugins.bspwm')
+logger = Logger(config.LOG_QUEUE)
 
 ###### COLOR OPTIONS #######
 FOREGROUND='#B0B0B0'
