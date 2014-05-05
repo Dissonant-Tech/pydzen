@@ -1,0 +1,23 @@
+
+n.n.n / 2014-05-04 
+==================
+
+ * Logging from multiple processes is working.
+ * Fixed battery plugin showing as charging past 50%
+ * Minor fixes for volume,battery, and timer plugins
+ * Removed color change on low battery causing freeze
+ * Fixed typos
+ * Updated README
+ * Added SXHKD fifo check to volume plugin
+ * Added headphone Icon to volume plugin
+ * New volume and charging icons, new icons in xbm
+ * Deleted some old/commented-out code
+ * init README
+ * Center Align works, right align still buggy
+ * Added more icons to volume plugin
+ * battery plugin fixed(for my setup anyway)
+ * Added title plugin, bspwm pager plugin is working
+ * Commit before changing log method.
+ * Noved logs into their own folder
+ * Added gitignore, untracked compiled files
+ * Highly modified https://github.com/xfire/pydzen

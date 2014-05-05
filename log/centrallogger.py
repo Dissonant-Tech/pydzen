@@ -4,7 +4,7 @@ import multiprocessing
 
 class CentralLogger(multiprocessing.Process):
 
-    """Logging process. Works with python 
+    """Logging process. Works with python
     subprocesses and multiprocessing.
     """
 
@@ -18,7 +18,7 @@ class CentralLogger(multiprocessing.Process):
         multiprocessing.Process.__init__(self)
 
         self._queue = queue
-        logging.basicConfig(level = logging.DEBUG, 
+        logging.basicConfig(level = logging.DEBUG,
                             filename = os.path.join(os.environ.get('HOME'), '.pydzen/log/Logs.log'))
         self._log = logging.getLogger('pydzen')
         self._log.info('** Central Logger process started **')
