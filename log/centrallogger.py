@@ -21,7 +21,7 @@ class CentralLogger(multiprocessing.Process):
         multiprocessing.Process.__init__(self)
 
         self._queue = queue
-        self.LOGFILE_NAME = 'pydzen.log'
+        self.LOGFILE_NAME = 'log/pydzen.log'
         self._log = logging.getLogger('pydzen')
         self._log.setLevel(config.LOGLEVEL)
         self._handler = logging.handlers.RotatingFileHandler(
