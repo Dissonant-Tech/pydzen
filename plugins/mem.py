@@ -52,7 +52,7 @@ def update():
 
             return ['Mem: %s' % mem, 
                     'Mem: %s (%d/%d Mb) Swap: %s (%d/%d Mb)' % (mem, mem_used, mem_total, swap, swap_used, swap_total)]
-    except StandardError, e:
+    except StandardError as e:
         logger.warn(e)
 
     return None

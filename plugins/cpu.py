@@ -65,7 +65,7 @@ def update(queue):
             pass
 
         return 'CPU: %s GHz (%s%%)%s' % (cpu, load, temp)
-    except StandardError, e:
+    except StandardError as e:
         logger.warn(e)
 
     return None

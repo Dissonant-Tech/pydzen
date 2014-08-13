@@ -95,7 +95,7 @@ def update():
                     progress_detail = '[%(currentMin)02d:%(currentSec)02d/%(totalMin)02d:%(totalSec)02d]' % state
                 return ['Amarok: ^i(%s)%s' % (icon, progress),
                         'Amarok: %s%s' % (song, progress_detail)]
-        except (StandardError, RuntimeError), e:
+        except (StandardError, RuntimeError) as e:
             amarok = None  # try to reconnect if connection is lost
             logger.warn(e)
 

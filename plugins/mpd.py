@@ -77,7 +77,7 @@ def update():
                     progress = utils.gdbar('%d %d' % (cur, max), l = '%d%% ' % (100. / max * cur))
                 return ['MPD: ^i(%s)%s' % (icon, progress),
                         'MPD: %s' % song]
-        except (StandardError, socket.error), e:
+        except (StandardError, socket.error) as e:
             mpd = None  # try to reconnect if connection is lost
             logger.warn(e)
 
