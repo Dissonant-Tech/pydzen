@@ -20,7 +20,24 @@ was missing some key features.
 Due to its single threaded nature, it was not possible to update plugins
 at different speeds, or near real-time. This is still very much a WIP but so
 far the biggest change to the original has to be plugins now running in 
-seperate processes.
+seperate processes. Some of the benefits using multiple processes provides are
+
+    1. Plugins can update independantly of eachother (see volume plugin)
+    2. Better overall performance
+    3. Better battery life, as non-critical plugins can be updated less often
+    4. More modularity is always good :)
+
+Installing
+==========
+
+I use pydzen with [bspwm](https://github.com/baskerville/bspwm). Setup is as simple as
+
+```
+git clone https://github.com/Dissonant-Tech/pydzen ~/.pydzen
+```
+
+Then edit `~/.config/bspwm/bspwmrc` and add `cd ~/.pydzen && ./pydzen &` at the botom.
+
 
 How it works
 ============
@@ -50,7 +67,7 @@ A very simple example would be something like:
         |
     pydzen.py reads
     queue, updates
-    accordingly
+    dzen accordingly
 ```
 
 Adding your own plugin
@@ -103,3 +120,16 @@ returns to `queue`.
 For an example you can look at the `bspwm.py` plugin, which returns both `plugins.logo` and `plugins.pager`
 to the queue.
 
+
+Contributing
+============
+
+...Is a great idea!
+
+There is currently a lot of work left to put into this plugin, more than I currently have time for, so if you'd like to contribute, please do!
+The most notable features I have in mind are:
+
+    1. Start dzen2 from inside `pydzen.py` rather than `pydzen`. This way we can start 3 dzen instances, one for left, right and center, allowing some proper text alignment.
+    2. Better logging. Currently logging is handled by `centrallogger.py` so any plugins wishing to use the central logger have to call `logger = Logger(config.LOG_QUEUE)`. It would be much cleaner to have logging work with less involvment from the plugin.
+    3. Create an `onclick` interface that plugins can use to call scripts when clicked.
+    4. Create a plugin class that can be inherited?
