@@ -18,7 +18,7 @@ class CentralLogger(multiprocessing.Process):
         multiprocessing.Process.__init__(self)
 
         self._queue = queue
-        logging.basicConfig(level = logging.DEBUG,
+        logging.basicConfig(level = logging.ERROR,
                             filename = os.path.join(os.environ.get('HOME'), '.pydzen/log/Logs.log'))
         self._log = logging.getLogger('pydzen')
         self._log.info('** Central Logger process started **')
@@ -63,3 +63,4 @@ class Logger():
 
     def quit(self):
         self._queue.put((None, 'Quit'))
+
