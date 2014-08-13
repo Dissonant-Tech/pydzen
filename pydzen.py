@@ -351,7 +351,6 @@ if __name__ == '__main__':
     init_logging()
 
     logger = Logger(config.LOG_QUEUE)
-    logger.debug("THIS IS A TEST")
     plugins = load_plugins()
 
     queue = Queue()

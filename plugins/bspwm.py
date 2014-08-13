@@ -62,10 +62,10 @@ def parse_tiling(tile):
     tile_type = ""
     # Desktop is tiled
     if tile.startswith("Lt"):
-        tile_type = "^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")  ^i(/home/dissonance/.pydzen/xbm/ntile.xbm)^fg()^bg()"
+        tile_type = "^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")  ^i("+os.path.join(config.ICON_PATH, 'ntile.xbm')+")^fg()^bg()"
     # Desktop is monocle
     elif tile.startswith("Lm"):
-        tile_type = "^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")  ^i(/home/dissonance/.pydzen/xbm/monocle.xbm)^fg()^bg()"
+        tile_type = "^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")  ^i("+os.path.join(config.ICON_PATH, 'monocle.xbm')+")^fg()^bg()"
 
     return tile_type
 

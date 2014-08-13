@@ -64,6 +64,3 @@ def update(queue):
             logger.error(e)
 
         time.sleep(TIMEOUT)
-
-def onClick():
-    return 'home/dissonance/.pydzen/plugins/scripts/dzen_network.sh'
