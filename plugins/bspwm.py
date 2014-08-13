@@ -40,7 +40,6 @@ ICO_3 = "○ "
 ICO_4 = "◉ "
 
 
-
 def parse_Pager(wm):
     result = ""
     for w in wm:
@@ -59,6 +58,17 @@ def parse_Pager(wm):
 
     return result
 
+def parse_tiling(tile):
+    tile_type = ""
+    # Desktop is tiled
+    if tile.startswith("Lt"):
+        tile_type = "^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")  ^i(/home/dissonance/.pydzen/xbm/ntile.xbm)^fg()^bg()"
+    # Desktop is monocle
+    elif tile.startswith("Lm"):
+        tile_type = "^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")  ^i(/home/dissonance/.pydzen/xbm/monocle.xbm)^fg()^bg()"
+
+    return tile_type
+
 def update(queue):
     try:
         # Subscribe to bspwm
@@ -66,16 +76,19 @@ def update(queue):
 
         # Icon is sent only once, so you must restart to change the icon
         queue.put({'plugins.icon': '^i('+os.path.join(config.ICON_PATH, config.LOGO+')')})
-        
+
         while True:
             line = sub.stdout.readline()
             line = str(line)
             ws = line.split(":")
+            # last entry in array is tiling type (tiled/monocle)
+            tile = ws[-1]
             # the first and last entries dont pertain to
             # the pager/workspaces
             ws.remove(ws[0])
             ws.remove(ws[-1])
-            pager = parse_Pager(ws)
+
+            pager = parse_Pager(ws) + parse_tiling(tile)
             queue.put({'plugins.pager': pager})
     except Exception as e:
         logger.exception(e)
