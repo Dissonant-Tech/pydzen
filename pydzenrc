@@ -73,4 +73,4 @@ import logging
 from multiprocessing import Queue
 
 LOG_QUEUE = Queue()
-LOGLEVEL = logging.WARN
+LOGLEVEL = logging.ERROR

@@ -251,6 +251,12 @@ def load_plugins():
     sys.path = sys.path[1:]
     return plugins
 
+def init_logging():
+    logger_proc = CentralLogger(config.LOG_QUEUE)
+    logger_proc.daemon = True
+    logger_proc.start()
+
+
 def init_template():
     t = {}
     for i in config.ORDER.keys():
@@ -342,8 +348,7 @@ def display(template):
 config = configure()
 
 if __name__ == '__main__':
-    logger_proc = CentralLogger(config.LOG_QUEUE)
-    logger_proc.start()
+    init_logging()
 
     logger = Logger(config.LOG_QUEUE)
     logger.debug("THIS IS A TEST")
