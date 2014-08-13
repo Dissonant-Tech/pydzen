@@ -1,6 +1,9 @@
 import os
 import logging
+import logging.handlers
 import multiprocessing
+
+from pydzen import config
 
 class CentralLogger(multiprocessing.Process):
 
@@ -18,9 +21,14 @@ class CentralLogger(multiprocessing.Process):
         multiprocessing.Process.__init__(self)
 
         self._queue = queue
-        logging.basicConfig(level = logging.ERROR,
-                            filename = os.path.join(os.environ.get('HOME'), '.pydzen/log/Logs.log'))
+        self.LOGFILE_NAME = 'pydzen.log'
         self._log = logging.getLogger('pydzen')
+        self._log.setLevel(config.LOGLEVEL)
+        self._handler = logging.handlers.RotatingFileHandler(
+                self.LOGFILE_NAME, maxBytes=10*1024*1024, backupCount=3
+                )
+        self._log.addHandler(self._handler)
+
         self._log.info('** Central Logger process started **')
 
     def run(self):
@@ -38,6 +46,14 @@ class Logger():
     """Interface to simplify logging
     with CentralLogger. This class should be
     imported in place of using logging.getLogger().
+
+    example use:
+
+        from log.centrallogger import Logger
+        logger = Logger(config.LOG_QUEUE)
+
+        except Exception as e:
+            logger.exception(e)
     """
 
     def __init__(self, queue):

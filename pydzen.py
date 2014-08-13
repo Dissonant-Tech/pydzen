@@ -28,7 +28,6 @@ import logging
 import traceback
 from multiprocessing import Process, Queue
 from optparse import OptionParser
-from log.centrallogger import CentralLogger, Logger
 
 class utils(object):
     @staticmethod
@@ -252,6 +251,8 @@ def load_plugins():
     return plugins
 
 def init_logging():
+    from log.centrallogger import CentralLogger
+    
     logger_proc = CentralLogger(config.LOG_QUEUE)
     logger_proc.daemon = True
     logger_proc.start()
@@ -349,6 +350,7 @@ config = configure()
 
 if __name__ == '__main__':
     init_logging()
+    from log.centrallogger import Logger
 
     logger = Logger(config.LOG_QUEUE)
     plugins = load_plugins()
