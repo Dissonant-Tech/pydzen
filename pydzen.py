@@ -28,6 +28,8 @@ import logging
 import traceback
 from multiprocessing import Process, Queue
 from optparse import OptionParser
+from log.centrallogger import CentralLogger, Logger
+    
 
 class utils(object):
     @staticmethod
@@ -250,13 +252,10 @@ def load_plugins():
     sys.path = sys.path[1:]
     return plugins
 
-def init_logging():
-    from log.centrallogger import CentralLogger
-    
+def init_logging_process():
     logger_proc = CentralLogger(config.LOG_QUEUE)
     logger_proc.daemon = True
     logger_proc.start()
-
 
 def init_template():
     t = {}
@@ -349,8 +348,7 @@ def display(template):
 config = configure()
 
 if __name__ == '__main__':
-    init_logging()
-    from log.centrallogger import Logger
+    init_logging_process()
 
     logger = Logger(config.LOG_QUEUE)
     plugins = load_plugins()

@@ -3,8 +3,6 @@ import logging
 import logging.handlers
 import multiprocessing
 
-from pydzen import config
-
 class CentralLogger(multiprocessing.Process):
 
     """Logging process. Works with python
@@ -23,7 +21,8 @@ class CentralLogger(multiprocessing.Process):
         self._queue = queue
         self.LOGFILE_NAME = 'log/pydzen.log'
         self._log = logging.getLogger('pydzen')
-        self._log.setLevel(config.LOGLEVEL)
+        self._log.setLevel(logging.ERROR)
+
         self._handler = logging.handlers.RotatingFileHandler(
                 self.LOGFILE_NAME, maxBytes=10*1024*1024, backupCount=3
                 )
