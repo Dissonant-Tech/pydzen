@@ -303,8 +303,8 @@ def configure():
             help = 'specify an alternate plugin directory')
     parser.add_option('-s', '--screens', dest = 'SCREENS', type = 'int',
             help = 'number of Xinerama screen')
-    parser.set_defaults(CONFIG_FILE = '~/.pydzen/pydzenrc',
-            PLUGIN_DIR = '~/.pydzen',
+    parser.set_defaults(CONFIG_FILE = os.path.join(os.getcwd(), 'pydzenrc'),
+            PLUGIN_DIR = os.path.join(os.getcwd(), 'plugins/'),
             SCREENS = 0)
 
     (options, args) = parser.parse_args()
@@ -337,13 +337,16 @@ def display(template):
     center = '^p(_CENTER)^p(-'+str(int(get_size(center))/2)+')'+center+'^p()'
     right = '^p(_RIGHT)^p(-230)'+right
 
-
     result = left+center+right
 
     logger.debug("result: " + result)
 
-    sys.stdout.write(result+'\n')
-    sys.stdout.flush()
+    dzen.stdin.write(bytes(result+'\n', 'utf-8'))
+    dzen.stdin.flush()
+
+def init_dzen():
+    dzen_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/pydzen'), stdin=subprocess.PIPE)
+    return dzen_proc
 
 config = configure()
 
@@ -358,6 +361,8 @@ if __name__ == '__main__':
 
     # Initalize an empty template we will send to dzen
     template = init_template()
+
+    dzen = init_dzen()
 
     try:
         for p in plugins:

@@ -64,7 +64,7 @@ JOINTS = ' '
 # path to where our icons are located
 import os
 
-PYDZEN_PATH = os.path.join(os.environ['HOME'], '.pydzen/')
+PYDZEN_PATH = os.getcwd()
 ICON_PATH = os.path.join(PYDZEN_PATH, 'xbm/')
 LOGO = 'arch_10x10.xbm'
 
