@@ -136,7 +136,7 @@ Contributing
 There is currently a lot of work left to put into this plugin, more than I currently have time for, so if you'd like to contribute, please do!
 The most notable features I have in mind are:
 
-1. Start dzen2 from inside `pydzen.py` rather than `pydzen`. This way we can start 3 dzen instances, one for left, right and center, allowing some proper text alignment.
+1. ~~Start dzen2 from inside `pydzen.py` rather than `pydzen`. This way we can start 3 dzen instances, one for left, right and center, allowing some proper text alignment.~~ Had to make a hybrid of using scripts and python as running `dzen2` from inside the python script was causing font/styling issues.
 2. Better logging. Currently logging is handled by `centrallogger.py` so any plugins wishing to use the central logger have to call `logger = Logger(config.LOG_QUEUE)`. It would be much cleaner to have logging work with less involvment from the plugin.
 3. Create an `onclick` interface that plugins can use to call scripts when clicked.
 4. Create a plugin class that can be inherited?
