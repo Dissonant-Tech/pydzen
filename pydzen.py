@@ -81,29 +81,6 @@ class utils(object):
         return utils.parse(utils.execute(args, value).split('\n'), regex_list)
 
     @staticmethod
-    def parse_file(path_list, regex_list):
-        """
-        parse one or several files with one or several regular expressions.
-        return an dictionary with all matches.
-        """
-        logger = logging.getLogger('utils')
-        logger.debug('parse_file(%s, %s)' % (path_list, regex_list))
-
-        if not isinstance(path_list, (types.ListType, types.TupleType)):
-            path_list = [path_list]
-
-        lines = []
-        for path in path_list:
-            try:
-                file = open(path, 'r')
-                lines.extend(file.readlines())
-                file.close()
-            except IOError:
-                logger.exception(e)
-
-        return utils.parse(lines, regex_list)
-
-    @staticmethod
     def parse(lines, regex_list):
         """
         parse a list of lines with one or several regular expressions.
@@ -184,31 +161,6 @@ class utils(object):
             logger.error('execute: error: %s' % err)
             sys.exit(1)
         return out
-
-    @staticmethod
-    def dzen(**kwargs):
-        """
-        return an communication object (returned by subprocess.Popen(...))
-        to an dzen instance.
-
-        all parameters from **kwargs overwrite the default parameters in
-        config.DZEN_OPTIONS.
-        """
-        args = config.DZEN_OPTIONS.copy()
-        args.update(kwargs)
-        return utils.pipe(config.DZEN, **args)
-
-    @staticmethod
-    def gdbar(value, **kwargs):
-        """
-        execute gdbar and return the generated string.
-
-        all parameters from **kwargs overwrite the default parameters in
-        config.GDBAR_OPTIONS.
-        """
-        args = config.GDBAR_OPTIONS.copy()
-        args.update(kwargs)
-        return utils.execute(config.GDBAR, value, **args)
 
     @staticmethod
     def cache(timeout):
