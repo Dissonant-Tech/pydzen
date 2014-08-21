@@ -40,6 +40,11 @@ git clone https://github.com/Dissonant-Tech/pydzen ~/.pydzen
 
 Then edit `~/.config/bspwm/bspwmrc` and add `cd ~/.pydzen && ./pydzen &` at the botom.
 
+###Dependencies:
+
+The pydzen scripts depend on [sres](https://github.com/baskerville/sres) for getting the screen width in pixels. 
+You can avoid this dependency by either using another method of retrieving screen width, or replacing the `screenWidth` variable with your screen's width.
+
 
 How it works
 ============
