@@ -315,38 +315,24 @@ def configure():
             PLUGIN_DIR = options.PLUGIN_DIR)
     return config
 
-def print_line(f, out):
-    f.stdin.write(bytes(out+'\n', "UTF-8"))
+def display(template):    
+    left_text =  config.JOINTS.join(filter(None, template['LEFT']))
+    center_text = config.JOINTS.join(filter(None, template['CENTER']))
+    right_text = config.JOINTS.join(filter(None, template['RIGHT']))
 
-def get_size(text):
-    # FIXME config.FONT_* may not be what dzen is actually using
-    re.compile('')
-    size = bytes.decode(subprocess.check_output(['txtw', '-f', config.FONT_TYPE, '-s', config.FONT_SIZE, text]))
-    return size.strip('\n')
+    write_to_stdin(left_dzen, left_text)
+    write_to_stdin(right_dzen, right_text)
+    write_to_stdin(center_dzen, center_text)
 
-def display(template):
-    left = ''
-    center = ''
-    right = ''
+def write_to_stdin(proc, text):
+    proc.stdin.write(bytes(text+'\n', 'utf-8'))
+    proc.stdin.flush()
 
-    left =  config.JOINTS.join(filter(None, template['LEFT']))
-    center = config.JOINTS.join(filter(None, template['CENTER']))
-    right = config.JOINTS.join(filter(None, template['RIGHT']))
-
-    left = '^p(_LEFT)'+left
-    center = '^p(_CENTER)^p(-'+str(int(get_size(center))/2)+')'+center+'^p()'
-    right = '^p(_RIGHT)^p(-230)'+right
-
-    result = left+center+right
-
-    logger.debug("result: " + result)
-
-    dzen.stdin.write(bytes(result+'\n', 'utf-8'))
-    dzen.stdin.flush()
-
-def init_dzen():
-    dzen_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/pydzen'), stdin=subprocess.PIPE)
-    return dzen_proc
+def init_dzen_procs():
+    left_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/left'), stdin=subprocess.PIPE)
+    center_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/center'), stdin=subprocess.PIPE)
+    right_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/right'), stdin=subprocess.PIPE)
+    return left_proc, center_proc, right_proc
 
 config = configure()
 
@@ -362,7 +348,7 @@ if __name__ == '__main__':
     # Initalize an empty template we will send to dzen
     template = init_template()
 
-    dzen = init_dzen()
+    left_dzen, center_dzen, right_dzen = init_dzen_procs()
 
     try:
         for p in plugins:
