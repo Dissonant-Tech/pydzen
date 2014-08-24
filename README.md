@@ -11,7 +11,7 @@ nice looking statusbars.
 
 Screenshot:
 
-![Pydzen Panel](http://www.github.com/Dissonant-Tech/pydzen/screenshot.jpg "Pydzen Panel")
+![Pydzen Panel](https://github.com/Dissonant-Tech/pydzen/blob/master/screenshot.jpg)
 
 
 Why Fork?
