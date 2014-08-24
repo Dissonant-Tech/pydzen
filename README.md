@@ -1,7 +1,7 @@
 pydzen
 ======
 
-Orignal Source: https://github.com/xfire/pydzen
+This is a fork of the older project [Pydzen](https://github.com/xfire/pydzen)
 
 Overview
 ========
@@ -9,8 +9,10 @@ Overview
 pydzen is a wrapper script around dzen, written in python, to easily create 
 nice looking statusbars.
 
+Screenshot:
 
-This is a fork of the older project [Pydzen](https://github.com/xfire/pydzen)
+![Pydzen Panel](http://www.github.com/Dissonant-Tech/pydzen/screenshot.jpg "Pydzen Panel")
+
 
 Why Fork?
 =========
