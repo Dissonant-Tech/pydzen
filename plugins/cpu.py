@@ -21,7 +21,7 @@ import os
 import re
 import logging
 
-from pydzen import config, utils
+from pydzen import config
 
 # ------- user config ----------------------------------------------------------
 ICON_TEMP = os.path.join(config.ICON_PATH, 'temp.xbm')

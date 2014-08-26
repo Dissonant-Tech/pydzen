@@ -22,7 +22,7 @@ import datetime
 from log.centrallogger import Logger
 import os
 
-from pydzen import config, utils
+from pydzen import config
 
 logger = Logger(config.LOG_QUEUE)
 

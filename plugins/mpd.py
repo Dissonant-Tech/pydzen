@@ -21,7 +21,7 @@ import os
 import logging
 import socket
 
-from pydzen import config, utils
+from pydzen import config
 
 # ------- user config ----------------------------------------------------------
 SONG_MAX = 100

@@ -24,7 +24,7 @@ import time
 import urllib
 from xml.dom import minidom
 
-from pydzen import config, utils
+from pydzen import config
 
 WEATHER_URL = 'http://xml.weather.yahoo.com/forecastrss?p=%s&u=%s'
 WEATHER_NS = 'http://xml.weather.yahoo.com/ns/rss/1.0'

@@ -4,7 +4,7 @@ from log.centrallogger import Logger
 import traceback
 import subprocess
 
-from pydzen import config, utils
+from pydzen import config
 
 
 logger = Logger(config.LOG_QUEUE)

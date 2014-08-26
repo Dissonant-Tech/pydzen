@@ -47,7 +47,6 @@ def update(queue):
             icon = os.path.join(config.ICON_PATH, 'bat_full_01.xbm')
 
             ac_vals = bool(int(open(os.path.join(AC, 'online')).read()))
-            #ac_vals = bool(int(open(os.path.join(AC, 'online')).read()))
 
             lastfull = int(open(os.path.join(BAT, 'energy_full')).read())
             remain = int(open(os.path.join(BAT, 'energy_now')).read())

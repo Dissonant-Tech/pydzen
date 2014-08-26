@@ -19,7 +19,7 @@ from log.centrallogger import Logger
 import subprocess
 import re
 import time
-from pydzen import config, utils
+from pydzen import config
 
 
 TIMEOUT = 3

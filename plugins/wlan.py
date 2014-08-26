@@ -20,7 +20,7 @@ from log.centrallogger import Logger
 import subprocess
 import time
 
-from pydzen import config, utils
+from pydzen import config
 
 # ------- user config ----------------------------------------------------------
 INTERVAL = 1
