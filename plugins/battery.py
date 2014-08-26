@@ -23,7 +23,7 @@ from log.centrallogger import Logger
 import math
 import time
 
-from pydzen import config, utils
+from pydzen import config
 
 logger = Logger(config.LOG_QUEUE)
 
@@ -66,8 +66,6 @@ def update(queue):
                 fg_color = config.FG_COLOR_NOTICE
                 icon = os.path.join(config.ICON_PATH, 'bat_low_01.xbm')
                 fg_color = ' '
-
-            bat = utils.gdbar('%s %s' % (remain, lastfull), l = '%d%% ' % percent)
 
             ac = ''
             if ac_vals:
