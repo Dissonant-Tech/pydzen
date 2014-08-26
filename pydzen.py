@@ -280,11 +280,27 @@ def write_to_stdin(proc, text):
     proc.stdin.write(bytes(text+'\n', 'utf-8'))
     proc.stdin.flush()
 
-def init_dzen_procs():
+def get_dzen_procs():
     left_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/left'), stdin=subprocess.PIPE)
     center_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/center'), stdin=subprocess.PIPE)
     right_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/right'), stdin=subprocess.PIPE)
     return left_proc, center_proc, right_proc
+
+def get_plugin_procs(plugin_q):
+    """
+    Starts plugins in a separate process
+    """
+    plugins = load_plugins()
+    procs = []
+
+    # Don't start procs yet, set them up first.
+    for p in plugins:
+        proc = Process(target=p.update, args=(plugin_q,), name=p.name)
+        proc.daemon = True
+        procs.append(proc)
+
+    return procs
+
 
 config = configure()
 
@@ -292,29 +308,28 @@ if __name__ == '__main__':
     init_logging_process()
 
     logger = Logger(config.LOG_QUEUE)
-    plugins = load_plugins()
+    logger.info("*** Pydzen Logger initialized  ***")
 
-    queue = Queue()
-    procs = []
-
-    # Initalize an empty template we will send to dzen
+    # Initalize an empty template to split output
     template = init_template()
 
-    left_dzen, center_dzen, right_dzen = init_dzen_procs()
+    # Start a Dzen instance for each panel alignment
+    logger.info("*** Initializing Dzen Processes  ***")
+    left_dzen, center_dzen, right_dzen = get_dzen_procs()
+
+    logger.info("*** Initializing Plugin Processes  ***")
+    plugin_q = Queue()
+    plugin_procs = get_plugin_procs(plugin_q)
 
     try:
-        for p in plugins:
-            proc = Process(target=p.update, args=(queue,), name=p.name)
-            proc.daemon = True
-            procs.append(proc)
-
-        for p in procs:
+        logger.info("*** Starting Plugin Processes ***")
+        for p in plugin_procs:
             p.start()
 
         while True:
-            q = queue.get()
-            logger.debug(q)
+            q = plugin_q.get()
 
+            # Split the queue output for each alignment
             if list(q.keys())[0] in config.ORDER['LEFT']:
                 template['LEFT'][config.ORDER['LEFT'].index(list(q.keys())[0])] = str(q[list(q.keys())[0]])
             if list(q.keys())[0] in config.ORDER['CENTER']:
@@ -324,7 +339,6 @@ if __name__ == '__main__':
 
             display(template)
 
-
     except IOError as e:
         try:
             logger.error(dzen.stderr.read())
@@ -332,6 +346,6 @@ if __name__ == '__main__':
         except Exception as se:
             logger.exception(se)
     except KeyboardInterrupt:
-        for p in procs:
+        for p in plugin_procs:
             p.terminate()
         logger.quit()
