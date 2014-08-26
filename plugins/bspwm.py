@@ -92,3 +92,5 @@ def update(queue):
             queue.put({'plugins.pager': pager})
     except Exception as e:
         logger.exception(e)
+    finally:
+        sub.terminate()
