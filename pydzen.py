@@ -330,6 +330,7 @@ if __name__ == '__main__':
             q = plugin_q.get()
 
             # Split the queue output for each alignment
+            #TODO: Create separate queue for each alignment
             if list(q.keys())[0] in config.ORDER['LEFT']:
                 template['LEFT'][config.ORDER['LEFT'].index(list(q.keys())[0])] = str(q[list(q.keys())[0]])
             if list(q.keys())[0] in config.ORDER['CENTER']:
