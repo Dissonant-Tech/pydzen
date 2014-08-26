@@ -64,5 +64,4 @@ def update(queue):
             updateVOL(queue)
             time.sleep(TIMEOUT)
     except Exception as e:
-        sub.terminate()
         logger.exception(e)

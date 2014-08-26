@@ -1,7 +1,7 @@
 #!/bin/sh
 
 screenWidth=$(sres -W)
-panelWidth=$((($screenWidth+3)/3))
+panelWidth=$(($screenWidth/3))
 xpos=$(($panelWidth*2))
 
 dzen2 -p -e 'button2=;' -h 16 -dock -ta r -title-name panel -fn "termniness:pixelsize=10" -fg "#B0B0B0" -bg "#242424" -w $panelWidth -x $xpos
