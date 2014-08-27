@@ -39,7 +39,7 @@ def format_td(seconds):
 def update(queue):
     while True:
         try:
-            queue.put({ 'plugins.timer': ('^fg()^i('+ICON+')^fg() '+str(time.strftime('%b, %d  %H:%M')))})
+            queue.put({ 'plugins.timer': ('^fg()^i('+ICON+')^fg() '+str(time.strftime('%b, %d  %H:%M ')))})
         except Exception as e:
             logger.warn(e)
         
