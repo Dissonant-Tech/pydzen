@@ -281,9 +281,9 @@ def write_to_stdin(proc, text):
     proc.stdin.flush()
 
 def get_dzen_procs():
-    left_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/left'), stdin=subprocess.PIPE)
-    center_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/center'), stdin=subprocess.PIPE)
-    right_proc = subprocess.Popen(os.path.join(config.PYDZEN_PATH, 'scripts/right'), stdin=subprocess.PIPE)
+    left_proc = subprocess.Popen([os.path.join(config.PYDZEN_PATH, 'scripts/onethirdpanel.sh'), 'l', 'panel-left'], stdin=subprocess.PIPE)
+    center_proc = subprocess.Popen([os.path.join(config.PYDZEN_PATH, 'scripts/onethirdpanel.sh'), 'c', 'panel-center'], stdin=subprocess.PIPE)
+    right_proc = subprocess.Popen([os.path.join(config.PYDZEN_PATH, 'scripts/onethirdpanel.sh'), 'r', 'panel-right'], stdin=subprocess.PIPE)
     return left_proc, center_proc, right_proc
 
 def get_plugin_procs(plugin_q):
