@@ -29,7 +29,7 @@ import traceback
 from multiprocessing import Process, Queue
 from optparse import OptionParser
 from log.centrallogger import CentralLogger, Logger
-    
+
 
 class utils(object):
     @staticmethod
@@ -179,6 +179,18 @@ class utils(object):
             return nfunc
         return wrapper
 
+    def onClick(btn, action, string):
+        """
+        wrapper for dzen's ^ca().
+        returns string wrapped by ^ca() and calls script action when
+        string is clicked with mouse button btn.
+
+        btn: 1-3, for left, right, middle mouse buttons
+        action: path to script to call
+        """
+        return "^ca(%s, %s) %s ^ca()" % (btn, action, string)
+
+
 def load_plugins():
     """
     try to load plugins from 'config.PLUGIN_DIR'.
@@ -267,7 +279,7 @@ def configure():
             PLUGIN_DIR = options.PLUGIN_DIR)
     return config
 
-def display(template):    
+def display(template):
     left_text =  config.JOINTS.join(filter(None, template['LEFT']))
     center_text = config.JOINTS.join(filter(None, template['CENTER']))
     right_text = config.JOINTS.join(filter(None, template['RIGHT']))
