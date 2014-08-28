@@ -66,6 +66,7 @@ import os
 
 PYDZEN_PATH = os.getcwd()
 ICON_PATH = os.path.join(PYDZEN_PATH, 'xbm/')
+SCRIPT_PATH = os.path.join(PYDZEN_PATH, 'scripts/')
 LOGO = 'arch_10x10.xbm'
 
 # path to dzen and gdbar executables

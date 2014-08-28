@@ -4,7 +4,7 @@ from log.centrallogger import Logger
 import traceback
 import subprocess
 
-from pydzen import config
+from pydzen import config, utils
 
 
 logger = Logger(config.LOG_QUEUE)
@@ -75,7 +75,8 @@ def update(queue):
         sub = subprocess.Popen(['bspc', 'control', '--subscribe'], stdout=subprocess.PIPE)
 
         # Icon is sent only once, so you must restart to change the icon
-        queue.put({'plugins.icon': '^i('+os.path.join(config.ICON_PATH, config.LOGO+')')})
+        script = os.path.join(config.SCRIPT_PATH, 'update.sh')
+        queue.put({'plugins.icon': utils.onClick('1', script, '^i('+os.path.join(config.ICON_PATH, config.LOGO+')', ))})
 
         while True:
             line = sub.stdout.readline()
