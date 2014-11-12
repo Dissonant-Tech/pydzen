@@ -61,10 +61,10 @@ def parse_Pager(wm):
 def parse_tiling(tile):
     tile_type = ""
     # Desktop is tiled
-    if tile.startswith("Lt"):
+    if tile.startswith("LT"):
         tile_type = "^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")  ^i("+os.path.join(config.ICON_PATH, 'ntile.xbm')+")^fg()^bg()"
     # Desktop is monocle
-    elif tile.startswith("Lm"):
+    elif tile.startswith("LM"):
         tile_type = "^fg("+FOCUSED_FG+")^bg("+FOCUSED_BG+")  ^i("+os.path.join(config.ICON_PATH, 'monocle.xbm')+")^fg()^bg()"
 
     return tile_type
