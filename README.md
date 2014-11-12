@@ -40,7 +40,7 @@ I use pydzen with [bspwm](https://github.com/baskerville/bspwm). Setup is as sim
 git clone https://github.com/Dissonant-Tech/pydzen ~/.pydzen
 ```
 
-Then edit `~/.config/bspwm/bspwmrc` and add `cd ~/.pydzen && ./pydzen &` at the botom.
+Then edit `~/.config/bspwm/bspwmrc` and add `cd ~/.pydzen && ./pydzen.py &` at the bottom.
 
 ###Dependencies:
 
