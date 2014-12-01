@@ -35,11 +35,18 @@ class Plugin(object):
             result = Template("%{B$cl} $txt %{B-}")
         return result.substitute(cl = color, txt = text);
 
-    def insertIcon(self, iconName):
+    def insertIcon(self, icon, useAbsPath = False):
+        result = ""
+        template = "^i(%s)"
+
         if self._mode == Mode.dzen:
-            return "^i(%s)" % (os.path.join(config.ICON_PATH, iconName))
+            if useAbsPath:
+                result = template % icon
+            result = template % (os.path.join(config.ICON_PATH, icon))
         else:
-            return iconName
+            result = iconName
+
+        return result
 
     def onClick(self, action, string, button = "1"):
         """
