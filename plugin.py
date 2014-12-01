@@ -21,26 +21,40 @@ class Plugin(object):
     def update(self, queue):
         pass
 
+    def setFgColor(self, text, color):
+        if self._mode == Mode.dzen:
+            result = Template("^fg($cl) $txt ^fg()")
+        if self._mode == Mode.bar:
+            result = Template("%{F$cl} $txt %{F-}")
+        return result.substitute(cl = color, txt = text);
+
+    def setBgColor(self, text, color):
+        if self._mode == Mode.dzen:
+            result = Template("^bg($cl) $txt ^bg()")
+        if self._mode == Mode.bar:
+            result = Template("%{B$cl} $txt %{B-}")
+        return result.substitute(cl = color, txt = text);
+
     def insertIcon(self, iconName):
         if self._mode == Mode.dzen:
             return "^i(%s)" % (os.path.join(config.ICON_PATH, iconName))
         else:
             return iconName
 
-    def onClick(self, action, string, btn = "1"):
+    def onClick(self, action, string, button = "1"):
         """
         wrapper for dzen's ^ca().
         returns string wrapped by ^ca() and calls script action when
         string is clicked with mouse button btn.
 
-        btn: 1-3, for left, right, middle mouse buttons,
+        button: 1-3, for left, right, middle mouse buttons,
             defualts to left mouse button
         action: path to script to call
         """
 
         if self._mode == Mode.dzen:
-            result = Template("^ca($btn, $act) $str ^ca()")
+            result = Template("^ca($btn, $act) $stn ^ca()")
         else:
-            result = Template("%{A$btn:$act:}$str%{A}")
+            result = Template("%{A$btn:$act:} $stn %{A}")
 
-        return result.substitute(btn, action, string)
+        return result.substitute(btn = button, act = action, stn = string)
