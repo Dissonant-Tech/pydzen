@@ -1,12 +1,11 @@
 import os, sys
-import traceback
-import subprocess
 
-from abc import ABCMeta, abstractmethod
 from string import Template
-from log.centrallogger import Logger
-from pydzen import config, utils
+from abc import ABCMeta, abstractmethod
 from pluginEnums import Mode, Position
+from multiprocessing import Queue
+
+from pydzen import config, utils
 
 class Plugin(object):
     __metaclass__ = ABCMeta
@@ -14,11 +13,12 @@ class Plugin(object):
     def __init__(self):
         self._mode = Mode.bar
         self._position = Position.none
+        self._log_queue = config.LOG_QUEUE
         self._fg = config.FG_COLOR
         self._bg = config.BG_COLOR
 
     @abstractmethod
-    def update(self):
+    def update(self, queue):
         pass
 
     def insertIcon(self, iconName):
