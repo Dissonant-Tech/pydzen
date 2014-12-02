@@ -26,6 +26,7 @@ import time
 import subprocess
 import logging
 import traceback
+import inspect
 from multiprocessing import Process, Queue
 from optparse import OptionParser
 from log.centrallogger import CentralLogger, Logger
@@ -216,20 +217,21 @@ def load_plugins():
 
 def load_plugin_classes():
     """
-    Try to load plugins from 'config.PLUGIN_PATH'. 
+    Try to load plugins from 'config.PLUGIN_DIR'.
 
     Class plugins must inherit from the Plugin abstract class in
     plugin.py and implement the abstract method update(self, queue).
     """
-    import inspect
-    from plugin import Plugin
+
+    from plugin import Plugin, Mode, Position
 
     # add plugin directory to sys.path and get file names
-    sys.path.insert(0, os.path.expanduser(config.PLUGIN_PATH))
-    files = [f for f in os.listdir(config.PLUGIN_PATH) if os.path.isfile(os.path.join(PLUGIN_PATH, f))]
+    sys.path.insert(0, os.path.expanduser(config.PLUGIN_DIR))
+    files = [f for f in os.listdir(config.PLUGIN_DIR) if os.path.isfile(os.path.join(config.PLUGIN_DIR, f))]
     modules = [f.replace('.py', '') for f in files]
     pluginList = [plug() for plug in getPlugins(modules)]
-    
+
+    sys.path = sys.path[1:]
     return pluginList
 
 def getPlugins(moduleNames):
@@ -244,7 +246,7 @@ def getPlugins(moduleNames):
     return objList
 
 def isPlugin(plugin):
-    if Plugin in inspect.getmro(plugin) and hasattr(plugin, 'update') and plugin.__name__ != 'Plugin':
+    if hasattr(plugin, 'update') and plugin.__name__ != 'Plugin':
         return True
     else:
         return False
@@ -336,6 +338,7 @@ def get_plugin_procs(plugin_q):
     Starts plugins in a separate process
     """
     plugins = load_plugins()
+    plugins.append(load_plugin_classes)
     procs = []
 
     # Don't start procs yet, set them up first.
@@ -345,22 +348,6 @@ def get_plugin_procs(plugin_q):
         procs.append(proc)
 
     return procs
-
-def get_plugin_class_procs(plugin_q):
-    """
-    Starts plugins in a separate process
-    """
-    plugins = load_plugin_classes()
-    procs = []
-
-    # Don't start procs yet, set them up first.
-    for p in plugins:
-        proc = Process(target=p.update, args=(plugin_q,), name=p.name)
-        proc.daemon = True
-        procs.append(proc)
-
-    return procs
-
 
 config = configure()
 

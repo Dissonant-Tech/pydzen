@@ -1,8 +1,6 @@
 import os, sys
-
 from string import Template
 from abc import ABCMeta, abstractmethod
-from pluginEnums import Mode, Position
 from multiprocessing import Queue
 from enum import Enum
 
