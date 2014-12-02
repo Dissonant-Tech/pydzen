@@ -4,15 +4,27 @@ from string import Template
 from abc import ABCMeta, abstractmethod
 from pluginEnums import Mode, Position
 from multiprocessing import Queue
+from enum import Enum
 
 from pydzen import config, utils
+
+class Mode(Enum):
+    dzen = 1
+    bar = 2
+
+class Position(Enum):
+    left = 1
+    center = 2
+    right = 3
+    none = 4
 
 class Plugin(object):
     __metaclass__ = ABCMeta
 
     def __init__(self):
-        self._mode = Mode.bar
+        self._mode = Mode.dzen
         self._position = Position.none
+        self._priority = 50
         self._log_queue = config.LOG_QUEUE
         self._fg = config.FG_COLOR
         self._bg = config.BG_COLOR
