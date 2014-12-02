@@ -26,6 +26,7 @@ import time
 import subprocess
 import logging
 import traceback
+import inspect
 from multiprocessing import Process, Queue
 from optparse import OptionParser
 from log.centrallogger import CentralLogger, Logger
@@ -193,8 +194,6 @@ class utils(object):
 
 def load_plugins():
     """
-    try to load plugins from 'config.PLUGIN_DIR'.
-
     each plugin must define an 'update' method, which returns either a string, an array
     of strings or None.
     """
@@ -215,6 +214,42 @@ def load_plugins():
             logger.error('error loading plugin "%s": %s' % (p, e))
     sys.path = sys.path[1:]
     return plugins
+
+def load_plugin_classes():
+    """
+    Try to load plugins from 'config.PLUGIN_DIR'.
+
+    Class plugins must inherit from the Plugin abstract class in
+    plugin.py and implement the abstract method update(self, queue).
+    """
+
+    from plugin import Plugin, Mode, Position
+
+    # add plugin directory to sys.path and get file names
+    sys.path.insert(0, os.path.expanduser(config.PLUGIN_DIR))
+    files = [f for f in os.listdir(config.PLUGIN_DIR) if os.path.isfile(os.path.join(config.PLUGIN_DIR, f))]
+    modules = [f.replace('.py', '') for f in files]
+    pluginList = [plug() for plug in getPlugins(modules)]
+
+    sys.path = sys.path[1:]
+    return pluginList
+
+def getPlugins(moduleNames):
+    objList = []
+    for mod in moduleNames:
+        if "Plugin" in mod:
+            mod = __import__(mod)
+            for name in dir(mod):
+                obj = getattr(mod, name)
+                if inspect.isclass(obj) and isPlugin(obj):
+                    objList.append(obj)
+    return objList
+
+def isPlugin(plugin):
+    if hasattr(plugin, 'update') and plugin.__name__ != 'Plugin':
+        return True
+    else:
+        return False
 
 def init_logging_process():
     logger_proc = CentralLogger(config.LOG_QUEUE)
@@ -303,16 +338,16 @@ def get_plugin_procs(plugin_q):
     Starts plugins in a separate process
     """
     plugins = load_plugins()
+    plugins.extend(load_plugin_classes())
     procs = []
 
     # Don't start procs yet, set them up first.
     for p in plugins:
-        proc = Process(target=p.update, args=(plugin_q,), name=p.name)
+        proc = Process(target=p.update, args=(plugin_q,), name=p.__class__.__name__)
         proc.daemon = True
         procs.append(proc)
 
     return procs
-
 
 config = configure()
 
