@@ -338,7 +338,7 @@ def get_plugin_procs(plugin_q):
     Starts plugins in a separate process
     """
     plugins = load_plugins()
-    plugins.append(load_plugin_classes)
+    plugins.extend(load_plugin_classes())
     procs = []
 
     # Don't start procs yet, set them up first.
