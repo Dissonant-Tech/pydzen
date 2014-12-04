@@ -65,7 +65,6 @@ JOINTS = ' '
 import os
 
 PYDZEN_PATH = os.getcwd()
-PLUGIN_PATH = os.path.join(PYDZEN_PATH, 'plugins/')
 ICON_PATH = os.path.join(PYDZEN_PATH, 'xbm/')
 SCRIPT_PATH = os.path.join(PYDZEN_PATH, 'scripts/')
 LOGO = 'arch_10x10.xbm'
