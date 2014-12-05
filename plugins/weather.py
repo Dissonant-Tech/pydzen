@@ -51,7 +51,6 @@ def get_weather(zone, units):
     temp = ycondition.getAttribute('temp'),
     return "%s %sC" % (condition, temp[0])
 
-@utils.cache(update_interval)
 def update():
     try:
         data = get_weather(zone, units)

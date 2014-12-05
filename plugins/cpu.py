@@ -37,7 +37,6 @@ RE_TEMP = re.compile(r'^temperature:\s*(?P<temp>\d+)\s+(?P<unit>.*)$')
 
 OLD_STATS = dict(user = 0, system = 0, nice = 0, idle = 0)
 
-@utils.cache(2)
 def update(queue):
     try:
         cpu_vals = utils.parse_file('/proc/cpuinfo', RE_CPU)

@@ -58,7 +58,6 @@ def songstr(song):
 
 AMAROK_STOP, AMAROK_PAUSE, AMAROK_PLAY = range(0, 3)
 
-@utils.cache(2)
 def update():
     global amarok
 

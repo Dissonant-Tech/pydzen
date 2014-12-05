@@ -197,53 +197,52 @@ def load_plugins():
     each plugin must define an 'update' method, which returns either a string, an array
     of strings or None.
     """
+    from plugin import Plugin, Mode, Position
     logger = Logger(config.LOG_QUEUE)
 
     sys.path.insert(0, os.path.expanduser(config.PLUGIN_DIR))
+    pluginFiles = [f for f in os.listdir(config.PLUGIN_DIR)]
+    pluginModules = [mod.replace('.py', '') for mod in pluginFiles]
     plugins = []
+    for pos in config.ORDER:
+        for p in config.ORDER[pos]:
+            config.PLUGINS.append(p)
     for p in config.PLUGINS:
-        try:
-            plugin = __import__(p, {}, {}, '*')
-            if hasattr(plugin, 'update'):
-                logger.debug('load plugin: "%s"' % p)
-                plugin.name = p
-                plugins.append(plugin)
-            else:
-                logger.warning('invalid plugin "%s": no update() function specified' % p)
-        except ImportError as e:
-            logger.error('error loading plugin "%s": %s' % (p, e))
+        # Plugin is a class
+        if '.' not  in p:
+            try:
+                for module in pluginModules:
+                    mod = __import__(module)
+                    if hasattr(mod, p):
+                        obj = getattr(mod, p)
+                        if inspect.isclass(obj) and isPlugin(obj):
+                            # Initialize Plugin class
+                            plugInstance = obj()
+                            if plugInstance.__class__.__name__ == p:
+                                logger.debug('load plugin class: "%s"' % plugInstance)
+                                plugInstance.name = plugInstance.__class__.__name__
+                                plugins.append(plugInstance)
+                            else:
+                                logger.debug('plugin %s not found' % p)
+            except ImportError as e:
+                logger.error('error loading plugin class "%s": %s' % (p, e))
+        # Plugin is a script
+        else:
+            try:
+                pluginName = p.split('.', 1)[1]
+                if pluginName in pluginModules:
+                    pluginModules.remove(pluginName)
+                plugin = __import__(p, {}, {}, '*')
+                if hasattr(plugin, 'update'):
+                    logger.debug('load plugin: "%s"' % p)
+                    plugin.name = p
+                    plugins.append(plugin)
+                else:
+                    logger.warning('invalid plugin "%s": no update() function specified' % p)
+            except ImportError as e:
+                logger.error('error loading plugin "%s": %s' % (p, e))
     sys.path = sys.path[1:]
     return plugins
-
-def load_plugin_classes():
-    """
-    Try to load plugins from 'config.PLUGIN_DIR'.
-
-    Class plugins must inherit from the Plugin abstract class in
-    plugin.py and implement the abstract method update(self, queue).
-    """
-
-    from plugin import Plugin, Mode, Position
-
-    # add plugin directory to sys.path and get file names
-    sys.path.insert(0, os.path.expanduser(config.PLUGIN_DIR))
-    files = [f for f in os.listdir(config.PLUGIN_DIR) if os.path.isfile(os.path.join(config.PLUGIN_DIR, f))]
-    modules = [f.replace('.py', '') for f in files]
-    pluginList = [plug() for plug in getPlugins(modules)]
-
-    sys.path = sys.path[1:]
-    return pluginList
-
-def getPlugins(moduleNames):
-    objList = []
-    for mod in moduleNames:
-        if "Plugin" in mod:
-            mod = __import__(mod)
-            for name in dir(mod):
-                obj = getattr(mod, name)
-                if inspect.isclass(obj) and isPlugin(obj):
-                    objList.append(obj)
-    return objList
 
 def isPlugin(plugin):
     if hasattr(plugin, 'update') and plugin.__name__ != 'Plugin':
@@ -338,12 +337,11 @@ def get_plugin_procs(plugin_q):
     Starts plugins in a separate process
     """
     plugins = load_plugins()
-    plugins.extend(load_plugin_classes())
     procs = []
 
     # Don't start procs yet, set them up first.
     for p in plugins:
-        proc = Process(target=p.update, args=(plugin_q,), name=p.__class__.__name__)
+        proc = Process(target=p.update, args=(plugin_q,), name=p.name)
         proc.daemon = True
         procs.append(proc)
 

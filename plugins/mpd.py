@@ -55,7 +55,6 @@ def songstr(song):
         s = '..%s' % s[len(s) - SONG_MAX:]
     return s
 
-@utils.cache(2)
 def update():
     global mpd
         

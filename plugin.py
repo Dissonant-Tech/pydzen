@@ -5,6 +5,7 @@ from multiprocessing import Queue
 from enum import Enum
 
 from pydzen import config, utils
+from log.centrallogger import Logger
 
 class Mode(Enum):
     dzen = 1
@@ -24,6 +25,7 @@ class Plugin(object):
         self._position = Position.none
         self._priority = 50
         self._log_queue = config.LOG_QUEUE
+        self._logger = Logger(self._log_queue)
         self._fg = config.FG_COLOR
         self._bg = config.BG_COLOR
 
