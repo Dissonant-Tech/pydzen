@@ -5,7 +5,7 @@
 # The order and position you want the plugins to appear in
 ORDER = dict(
                 LEFT =  [
-                        'plugins.bspwm'
+                        'BspwmPlugin'
                         ],
                 CENTER= [
                         'plugins.title',

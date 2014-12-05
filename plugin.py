@@ -35,16 +35,16 @@ class Plugin(object):
 
     def setFgColor(self, text, color):
         if self._mode == Mode.dzen:
-            result = Template("^fg($cl) $txt ^fg()")
+            result = Template("^fg($cl)$txt^fg()")
         if self._mode == Mode.bar:
-            result = Template("%{F$cl} $txt %{F-}")
+            result = Template("%{F$cl}$txt%{F-}")
         return result.substitute(cl = color, txt = text);
 
     def setBgColor(self, text, color):
         if self._mode == Mode.dzen:
-            result = Template("^bg($cl) $txt ^bg()")
+            result = Template("^bg($cl)$txt^bg()")
         if self._mode == Mode.bar:
-            result = Template("%{B$cl} $txt %{B-}")
+            result = Template("%{B$cl}$txt%{B-}")
         return result.substitute(cl = color, txt = text);
 
     def insertIcon(self, icon, useAbsPath = False):
@@ -72,8 +72,8 @@ class Plugin(object):
         """
 
         if self._mode == Mode.dzen:
-            result = Template("^ca($btn, $act) $stn ^ca()")
+            result = Template("^ca($btn, $act)$stn^ca()")
         else:
-            result = Template("%{A$btn:$act:} $stn %{A}")
+            result = Template("%{A$btn:$act:}$stn%{A}")
 
         return result.substitute(btn = button, act = action, stn = string)
