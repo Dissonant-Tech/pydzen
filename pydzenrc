@@ -2,16 +2,10 @@
 #
 # vim:syntax=python:sw=4:ts=4:expandtab
 
-# NOTE: Must be the name of a .py file in the plugins folder,
-# NOT necessarily a plugin itself.
-# (i.e bspwm.py contains both title,and pager plugins)
-PLUGINS = ['plugins.bspwm','plugins.title','plugins.wlan','plugins.volume','plugins.battery','plugins.timer']
-
 # The order and position you want the plugins to appear in
 ORDER = dict(
                 LEFT =  [
-                        'plugins.icon',
-                        'plugins.pager'
+                        'plugins.bspwm'
                         ],
                 CENTER= [
                         'plugins.title',
@@ -20,7 +14,7 @@ ORDER = dict(
                         'plugins.wlan',
                         'plugins.volume',
                         'plugins.battery',
-                        'plugins.timer',
+                        'TimerPlugin',
                         ]
             )
 
@@ -78,4 +72,4 @@ import logging
 from multiprocessing import Queue
 
 LOG_QUEUE = Queue()
-LOGLEVEL = logging.ERROR
+LOGLEVEL = logging.DEBUG

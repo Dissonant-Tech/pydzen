@@ -201,25 +201,37 @@ def load_plugins():
     logger = Logger(config.LOG_QUEUE)
 
     sys.path.insert(0, os.path.expanduser(config.PLUGIN_DIR))
+    pluginFiles = [f for f in os.listdir(config.PLUGIN_DIR)]
+    pluginModules = [mod.replace('.py', '') for mod in pluginFiles]
     plugins = []
+    for pos in config.ORDER:
+        for p in config.ORDER[pos]:
+            config.PLUGINS.append(p)
     for p in config.PLUGINS:
         # Plugin is a class
         if '.' not  in p:
             try:
-                plugin = __import__(p)
-                for name in dir(mod):
-                    obj = getattr(mod, name)
-                    if inspect.isclass(obj) and isPlugin(obj):
-                        # Initialize Plugin class
-                        plugInstance = obj()
-                        logger.debug('load plugin class: "%s"' % plugInstance)
-                        plugInstance.name = plugInstance.__class__.__name__
-                        plugins.append(plugInstance)
+                for module in pluginModules:
+                    mod = __import__(module)
+                    if hasattr(mod, p):
+                        obj = getattr(mod, p)
+                        if inspect.isclass(obj) and isPlugin(obj):
+                            # Initialize Plugin class
+                            plugInstance = obj()
+                            if plugInstance.__class__.__name__ == p:
+                                logger.debug('load plugin class: "%s"' % plugInstance)
+                                plugInstance.name = plugInstance.__class__.__name__
+                                plugins.append(plugInstance)
+                            else:
+                                logger.debug('plugin %s not found' % p)
             except ImportError as e:
                 logger.error('error loading plugin class "%s": %s' % (p, e))
         # Plugin is a script
         else:
             try:
+                pluginName = p.split('.', 1)[1]
+                if pluginName in pluginModules:
+                    pluginModules.remove(pluginName)
                 plugin = __import__(p, {}, {}, '*')
                 if hasattr(plugin, 'update'):
                     logger.debug('load plugin: "%s"' % p)

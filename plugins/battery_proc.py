@@ -40,7 +40,6 @@ RE_REMAINING_CAPACITY = re.compile(r'^remaining capacity:\s+(?P<remain>\d+).*$')
 RE_PRESENT_RATE = re.compile(r'^present rate:\s+(?P<rate>\d+).*$')
 RE_AC_ONLINE = re.compile(r'^state:\s*(?P<state>on.line).*$')
 
-@utils.cache(2)
 def update():
     try:
         fg_color = config.FG_COLOR

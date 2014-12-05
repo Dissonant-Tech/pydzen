@@ -31,7 +31,6 @@ RE_SWAP = re.compile('^Swap:\s*(?P<total>\d+)\s+(?P<used>\d+)\s+(?P<free>\d+).*$
 def bar(used, total):
     return utils.gdbar('%d %d' % (used, total), l = '%d%% ' % (100. / total * used))
 
-@utils.cache(2)
 def update():
     try:
         out = utils.execute('free', m = True)

@@ -76,7 +76,7 @@ def update(queue):
 
         # Icon is sent only once, so you must restart to change the icon
         script = os.path.join(config.SCRIPT_PATH, 'update.sh')
-        queue.put({'plugins.icon': utils.onClick('1', script, '^i('+os.path.join(config.ICON_PATH, config.LOGO+')', ))})
+        LOGO = '^i('+os.path.join(config.ICON_PATH, config.LOGO+')')
 
         while True:
             line = sub.stdout.readline()
@@ -90,7 +90,7 @@ def update(queue):
             ws.remove(ws[-1])
 
             pager = parse_Pager(ws) + parse_tiling(tile)
-            queue.put({'plugins.pager': pager})
+            queue.put({'plugins.bspwm': LOGO + pager})
     except Exception as e:
         logger.exception(e)
     finally:
