@@ -15,7 +15,7 @@ class TimerPlugin(Plugin):
     def update(self, queue):
         while True:
             try:
-                queue.put({ self.__class__.__name__: (self.insertIcon(self._icon)+str(time.strftime('%b, %d  %H:%M ')))})
+                queue.put({ self.__class__.__name__: (self.insertIcon(self._icon)+str(time.strftime(' %b, %d  %H:%M ')))})
             except Exception as e:
                 self._logger.debug(e)
 
