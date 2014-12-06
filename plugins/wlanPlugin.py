@@ -8,7 +8,7 @@ from plugin import Plugin, Mode, Position
 
 
 class WlanPlugin(Plugin):
-    """Shows Date and Time"""
+    """Shows wlan status and ESSID"""
     def __init__(self):
         super(WlanPlugin, self).__init__()
         self._position = Position.right
