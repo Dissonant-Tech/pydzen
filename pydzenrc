@@ -13,7 +13,7 @@ ORDER = dict(
                 RIGHT = [
                         'WlanPlugin',
                         'plugins.volume',
-                        'plugins.battery',
+                        'BatteryPlugin',
                         'TimerPlugin',
                         ]
             )
