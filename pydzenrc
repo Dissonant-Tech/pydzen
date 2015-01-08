@@ -8,7 +8,7 @@ ORDER = dict(
                         'BspwmPlugin'
                         ],
                 CENTER= [
-                        'plugins.title',
+                        'TitlePlugin',
                         ],
                 RIGHT = [
                         'WlanPlugin',
