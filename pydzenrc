@@ -12,7 +12,7 @@ ORDER = dict(
                         ],
                 RIGHT = [
                         'WlanPlugin',
-                        'plugins.volume',
+                        'VolumePlugin',
                         'BatteryPlugin',
                         'TimerPlugin',
                         ]
