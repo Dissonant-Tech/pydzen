@@ -15,6 +15,7 @@ ORDER = dict(
                         'VolumePlugin',
                         'BatteryPlugin',
                         'TimerPlugin',
+                        'LogoutPlugin',
                         ]
             )
 
