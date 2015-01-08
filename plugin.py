@@ -79,3 +79,11 @@ class Plugin(object):
             result = Template("%{A$btn:$act:}$stn%{A}")
 
         return result.substitute(btn = button, act = action, stn = string)
+    
+    def pad(self, text):
+        """
+        Adds a space before and after input.
+
+        text: string input
+        """
+        return " " + text + " " 
