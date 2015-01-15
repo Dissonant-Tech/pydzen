@@ -83,10 +83,13 @@ class Plugin(object):
 
         return result.substitute(btn = button, act = action, stn = string)
     
-    def pad(self, text):
+    def pad(self, text, count = 1):
         """
         Adds a space before and after input.
 
         text: string input
         """
-        return " " + text + " " 
+        output = text
+        for i in range(count):
+            output = " " + output + " "
+        return output

@@ -39,19 +39,24 @@ class VolumePlugin(Plugin):
 
         VOL = str(subprocess.check_output(['amixer', 'get', 'Master']))
         VOL = re.findall(r'\[(.+?)\]',VOL)
+        VOL[0] = VOL[0].strip('%')
 
+        # Is the sound muted?
         if VOL[2] == 'off':
             ICON_VOL = config.ICON_PATH+'vol3.xbm'
         elif 'values=on' in HEADPHONE.communicate()[0].decode():
             ICON_VOL = config.ICON_PATH+'headphone1.xbm'
         else:
-            if int(VOL[0].strip('%')) >= 40:
+            if int(VOL[0]) >= 40:
                 ICON_VOL = config.ICON_PATH+'vol1.xbm'
-            elif int(VOL[0].strip('%')) > 0:
+            elif int(VOL[0]) > 0:
                 ICON_VOL = config.ICON_PATH+'vol2.xbm'
             else:
                 ICON_VOL = config.ICON_PATH+'vol3.xbm'
 
         HEADPHONE.stdout.close()
-        output = self.insertIcon(ICON_VOL) + self.pad(VOL[0])
+
+        icon_out = self.setBgColor(self.pad(self.insertIcon(ICON_VOL), 2), "#242424")
+        output = icon_out + self.pad(VOL[0])
+
         queue.put({self.__class__.__name__: output})
