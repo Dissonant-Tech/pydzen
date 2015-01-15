@@ -1,0 +1,64 @@
+#!/bin/sh
+
+if [ $(pgrep -cx popup_menu) -gt 1 ] ; then
+	printf "%s\n" "The panel is already running." >&2
+	exit 1
+fi
+
+. $HOME/.pydzen/scripts/config
+
+MENUFILE=$HOME/.pydzen/scripts/logout_menu/menu_choices
+
+w=100
+
+#put the mouse position into shell variables X, Y and SCREEN
+eval $(xdotool getmouselocation --shell)
+X=$(($X - $w))
+Y=$(($Y + $(($panel_height/2))))
+
+# Width of the graphical separator (default 80% of window's width)
+SEPARATOR_WIDTH=`expr $w - 15`
+
+# number of visible menu entries (access the others through scrolling up/down)
+LINES=`wc -l "$MENUFILE"|sed -e 's/ .*//'`
+[ $LINES -gt 20 ] && LINES=20
+
+execute () {
+	read PROG
+
+	while read LINE; do 
+		LBL=;APP=
+		LBL=$(echo $LINE|sed -e 's/:.*$//' -e 's/^[ \t]*//' -e 's/[ \t]*$//')
+		APP=$(echo $LINE|sed -e 's/^.*://' -e 's/^[ \t]*//' -e 's/[ \t]*$//')
+
+		if [ x"$APP" = x"exit" ]; then
+			exit
+		elif [ x"$LBL" = x"$PROG" ]; then
+			if [ x"$APP" = x"" ]; then
+				$LBL&
+			else
+				$APP&
+			fi
+		fi
+	done < "$MENUFILE"
+	exit
+}
+
+
+(
+echo " "   
+sed -e 's/:.*$//' \
+    -e 's/^.--*/ ^r('${SEPARATOR_WIDTH}'x1)/' "$MENUFILE" 
+) | \
+	dzen2 -x $X -y $Y -l $LINES -h $panel_height -w $w -bg $color_bg -fg $color_fg -fn $font -ta l -sa l -p -m -e 'onstart=uncollapse,scrollhome;leaveslave=exit;button1=menuprint_noparse;button2=exit' | execute
+#'onstart=uncollapse,scrollhome,raise;\
+#enterslave=grabkeys;\
+#leaveslave=exit;\
+#button4=scrollup;\
+#button5=scrolldown;\
+#key_Left=scrollup;\
+#key_Right=scrolldown;\
+#key_Escape=ungrabkeys,exit;\
+#button1=menuprint_noparse,exit;\
+#button2=exit;\
+#button3=exit' | execute
