@@ -49,9 +49,12 @@ class Plugin(object):
             result = Template("%{B$cl}$txt%{B-}")
         return result.substitute(cl = color, txt = text);
 
-    def insertIcon(self, icon, useAbsPath = False):
+    def insertIcon(self, icon, useAbsPath = False, isUTF = False):
         result = ""
         template = "^i(%s)"
+
+        if isUTF:
+            return icon
 
         if self._mode == Mode.dzen:
             if useAbsPath:

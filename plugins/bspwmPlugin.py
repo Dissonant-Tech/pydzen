@@ -31,6 +31,8 @@ class BspwmPlugin(Plugin):
             # Subscribe to bspwm
             sub = subprocess.Popen(['bspc', 'control', '--subscribe'], stdout=subprocess.PIPE)
 
+            logo_out = self.insertIcon(self._icon_logo)
+
             while True:
                 line = sub.stdout.readline()
                 line = str(line)
@@ -42,9 +44,12 @@ class BspwmPlugin(Plugin):
                 ws.remove(ws[0])
                 ws.remove(ws[-1])
 
-                pager = self.parse_Pager(ws) + self.parse_tiling(tile)
+                pager = self.parse_Pager(ws) 
+                pager = self.setBgColor(self.pad(pager) , "#242424");
 
-                queue.put({self.__class__.__name__: ("  "+self.insertIcon(self._icon_logo)+"  " + pager)})
+                output = pager + self.parse_tiling(tile)
+
+                queue.put({self.__class__.__name__: ("  "+logo_out+"  " + output)})
         except Exception as e:
             self._logger.exception(e)
         finally:
@@ -73,9 +78,9 @@ class BspwmPlugin(Plugin):
         tile_type = ""
         # Desktop is tiled
         if tile.startswith("LT"):
-            tile_type = self.setFgColor(self.setBgColor(self.insertIcon(self._icon_tiled), self._color_focused_bg), self._color_focused_fg)
+            tile_type = self.setFgColor(self.insertIcon(self._icon_tiled), self._color_focused_fg)
         # Desktop is monocle
         elif tile.startswith("LM"):
-            tile_type = self.setFgColor(self.setBgColor(self.insertIcon(self._icon_monocole), self._color_focused_bg), self._color_focused_fg)
+            tile_type = self.setFgColor(self.insertIcon(self._icon_monocole), self._color_focused_fg)
 
-        return tile_type
+        return self.pad(tile_type)
