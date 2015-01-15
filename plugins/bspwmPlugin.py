@@ -44,7 +44,7 @@ class BspwmPlugin(Plugin):
 
                 pager = self.parse_Pager(ws) + self.parse_tiling(tile)
 
-                queue.put({self.__class__.__name__: (self.insertIcon(self._icon_logo)+"  " + pager)})
+                queue.put({self.__class__.__name__: ("  "+self.insertIcon(self._icon_logo)+"  " + pager)})
         except Exception as e:
             self._logger.exception(e)
         finally:

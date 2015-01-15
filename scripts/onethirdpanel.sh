@@ -5,7 +5,10 @@ title=$2
 
 screenWidth=$(sres -W)
 panelWidth=$(($screenWidth/3))
+panelHeight=20
 xpos=0
+
+font="terminess:pixelsize=9,-*-tewi-medium-*-normal-*-11-*-*-*-*-*-*-*"
 
 if [[ "$alignment" = "c" ]]; then
 
@@ -19,4 +22,4 @@ elif [[ "$alignment" = "r" ]]; then
     panelWidth=$(($panelWidth+1))
 fi
 
-dzen2 -p -e 'button2=;' -h 16 -dock -ta $alignment -title-name $title -fn "termniness:pixelsize=10" -fg "#B0B0B0" -bg "#242424" -w $panelWidth -x $xpos
+dzen2 -p -e 'button2=;' -h $panelHeight -dock -ta $alignment -title-name $title -fn "$font" -dock -fg "#B0B0B0" -bg "#242424" -w $panelWidth -x $xpos

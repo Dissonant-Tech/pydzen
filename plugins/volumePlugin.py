@@ -53,4 +53,5 @@ class VolumePlugin(Plugin):
                 ICON_VOL = config.ICON_PATH+'vol3.xbm'
 
         HEADPHONE.stdout.close()
-        queue.put({self.__class__.__name__: self.insertIcon(ICON_VOL) + VOL[0]})
+        output = self.insertIcon(ICON_VOL) + self.pad(VOL[0])
+        queue.put({self.__class__.__name__: output})
