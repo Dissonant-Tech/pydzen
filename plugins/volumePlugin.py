@@ -39,7 +39,7 @@ class VolumePlugin(Plugin):
 
         VOL = str(subprocess.check_output(['amixer', 'get', 'Master']))
         VOL = re.findall(r'\[(.+?)\]',VOL)
-        VOL[0] = VOL[0].strip('%')
+        VOL[0] = VOL[0].strip('%').strip(" ")
 
         # Is the sound muted?
         if VOL[2] == 'off':

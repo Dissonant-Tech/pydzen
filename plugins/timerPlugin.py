@@ -13,9 +13,10 @@ class TimerPlugin(Plugin):
         self._icon = self.insertIcon('clock.xbm')
 
     def update(self, queue):
+        icon_out = self.setBgColor(self.pad(self._icon, 2), self._bg_light)
         while True:
             try:
-                queue.put({ self.__class__.__name__: (self._icon + str(time.strftime(' %b, %d  %H:%M ')))})
+                queue.put({ self.__class__.__name__: (icon_out + str(time.strftime(' %b, %d  %H:%M ')))})
             except Exception as e:
                 self._logger.debug(e)
 

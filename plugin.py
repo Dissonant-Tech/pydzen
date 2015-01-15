@@ -28,6 +28,7 @@ class Plugin(object):
         self._logger = Logger(self._log_queue)
         self._fg = config.FG_COLOR
         self._bg = config.BG_COLOR
+        self._bg_light = "#242424"
         self._fg_urgent = config.FG_COLOR_URGENT
         self._fg_notice = config.FG_COLOR_NOTICE
 

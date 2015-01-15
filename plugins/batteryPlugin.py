@@ -49,8 +49,9 @@ class BatteryPlugin(Plugin):
                     icon = self.insertIcon('ac15.xbm')
                     fg_color = self._fg_notice
 
-                percent = str(percent)+'%'
-                output = self.setFgColor((icon), fg_color) + self.pad(percent)
+                percent = str(percent)
+                icon_out = self.setBgColor(self.pad(self.setFgColor(icon, fg_color), 2), self._bg_light)
+                output = icon_out + self.pad(percent)
                 queue.put({self.__class__.__name__: output})
             except Exception as e:
                 self._logger.debug(e)

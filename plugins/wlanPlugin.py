@@ -44,7 +44,8 @@ class WlanPlugin(Plugin):
                 else:
                     self._icon_wifi = 'wireless5.xbm'
 
-                queue.put({ self.__class__.__name__: (self.insertIcon(self._icon_wifi)+" "+ESSID)})
+                icon_out = self.setBgColor(self.pad(self.insertIcon(self._icon_wifi), 2), self._bg_light)
+                queue.put({ self.__class__.__name__: (icon_out+self.pad(ESSID))})
             except Exception as e:
                 self._logger.debug(e)
 
