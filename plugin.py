@@ -66,7 +66,7 @@ class Plugin(object):
 
         return result
 
-    def onClick(self, action, string, button = "1"):
+    def onClick(self, action, string, button = "1", useAbsPath = False):
         """
         wrapper for dzen's ^ca().
         returns string wrapped by ^ca() and calls script action when
@@ -76,6 +76,9 @@ class Plugin(object):
             defualts to left mouse button
         action: path to script to call
         """
+
+        if not useAbsPath:
+            action = os.path.join(config.SCRIPT_PATH, action)
 
         if self._mode == Mode.dzen:
             result = Template("^ca($btn, $act)$stn^ca()")
