@@ -4,13 +4,13 @@ pydzen
 This is a fork of the older project [Pydzen](https://github.com/xfire/pydzen)
 
 The master branch contains only three example plugins, timer.py and timerPlugin.py
-and logoutPlugin.py. This is so Pydzen can remain as clean as possible while other 
+and logoutPlugin.py. This is so Pydzen can remain as clean as possible while other
 branches will be used to maintain my personal configuration.
 
 Overview
 ========
 
-pydzen is a wrapper script around dzen, written in python, to easily create 
+pydzen is a wrapper script around dzen, written in python, to easily create
 nice looking statusbars.
 
 Screenshot:
@@ -21,13 +21,13 @@ Screenshot:
 Why Fork?
 =========
 
-The older project has not been updated in a long time (6 years) and 
+The older project has not been updated in a long time (6 years) and
 was missing some key features.
 
 
 Due to its single threaded nature, it was not possible to update plugins
 at different speeds, or near real-time. This is still very much a WIP but so
-far the biggest change to the original has to be plugins now running in 
+far the biggest change to the original has to be plugins now running in
 seperate processes. Some of the benefits using multiple processes provides are
 
 1. Plugins can update independantly of eachother (see volume plugin)
@@ -48,7 +48,7 @@ Then edit `~/.config/bspwm/bspwmrc` and add `cd ~/.pydzen && ./pydzen.py &` at t
 
 ###Dependencies:
 
-The pydzen scripts depend on [sres](https://github.com/baskerville/sres) for getting the screen width in pixels. 
+The pydzen scripts depend on [sres](https://github.com/baskerville/sres) for getting the screen width in pixels.
 You can avoid this dependency by either using another method of retrieving screen width, or replacing the `screenWidth` variable with your screen's width.
 
 
@@ -95,7 +95,7 @@ touch plugin/myplugin.py
 
 Your plugin **must** contain an update method that takes one argument named queue, your output must be sent
 as a dictionary object to the queue variable as shown below. If your plugin has no output, maybe it's acting
-as a backend to another plugin, you dont need to put anything into the queue, but do still need to add it to 
+as a backend to another plugin, you dont need to put anything into the queue, but do still need to add it to
 pydzenrc as shown below.
 Your plugin may optionally import config and utils from pydzen. This will let you read
 values in `pydzenrc`.
@@ -114,7 +114,7 @@ Now you must add `plugins.myplugin` to `pydzenrc`
 
 ```python
 
-# plugins to load, in no particular order 
+# plugins to load, in no particular order
 PLUGINS = ['plugins.volume','plugins.myplugin']
 
 # order in which to put queue output
@@ -129,7 +129,7 @@ Thats it!
 
 One final thing to note, while in the `PLUGINS` variable inside of `pydzenrc` you must use the name
 of the file inside of the plugin folder, in `ORDER` you must use the name of the dictionary key it
-returns to `queue`. 
+returns to `queue`.
 For an example you can look at the `bspwm.py` plugin, which returns both `plugins.logo` and `plugins.pager`
 to the queue.
 
