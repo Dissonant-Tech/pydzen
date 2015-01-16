@@ -3,6 +3,10 @@ pydzen
 
 This is a fork of the older project [Pydzen](https://github.com/xfire/pydzen)
 
+The master branch contains only three example plugins, timer.py and timerPlugin.py
+and logoutPlugin.py. This is so Pydzen can remain as clean as possible while other 
+branches will be used to maintain my personal configuration.
+
 Overview
 ========
 
