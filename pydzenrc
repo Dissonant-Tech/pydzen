@@ -5,15 +5,10 @@
 # The order and position you want the plugins to appear in
 ORDER = dict(
                 LEFT =  [
-                        'BspwmPlugin'
                         ],
                 CENTER= [
-                        'TitlePlugin',
                         ],
                 RIGHT = [
-                        'WlanPlugin',
-                        'VolumePlugin',
-                        'BatteryPlugin',
                         'TimerPlugin',
                         'LogoutPlugin',
                         ]
