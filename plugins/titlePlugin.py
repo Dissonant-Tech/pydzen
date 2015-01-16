@@ -22,7 +22,11 @@ class TitlePlugin(Plugin):
                 line = line[2:-3]
 
                 title = (line[:45]+'...') if len(line) > 45 else line
-                output = self.setBgColor(self.pad(title, 2), self._bg_light)
+                if not title:
+                    output = ""
+                else:
+                    output = self.setBgColor(self.pad(title, 2), self._bg_light)
+
                 queue.put({self.__class__.__name__: output})
         except Exception as e:
             self._logger.exception(e)

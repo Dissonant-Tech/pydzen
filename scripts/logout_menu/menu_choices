@@ -1,4 +1,4 @@
  ^i(/home/dissonance/.pydzen/xbm/lock2.xbm) Lock:dm-tool lock
- ^i(/home/dissonance/.pydzen/xbm/logout2.xbm) Restart:sudo reboot
+ ^i(/home/dissonance/.pydzen/xbm/logout2.xbm) Restart:systemctl reboot
  ^i(/home/dissonance/.pydzen/xbm/logout1.xbm) Shutdown:sudo shutdown -h 5
  ----------
