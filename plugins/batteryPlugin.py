@@ -12,7 +12,8 @@ class BatteryPlugin(Plugin):
     def __init__(self):
         super(BatteryPlugin, self).__init__()
         self._position = Position.right
-        self._timeout = 2
+        self._timeout = 3
+        self._fg_color = self._fg
         self._bat = "/sys/class/power_supply/BAT1"
         self._ac = "/sys/class/power_supply/ACAD"
         self._re_full_capacity = re.compile(r'^last full capacity:\s+(?P<lastfull>\d+).*$')
@@ -23,7 +24,7 @@ class BatteryPlugin(Plugin):
     def update(self, queue):
         while True:
             try:
-                fg_color = self._fg
+                self._fg_color = self._fg
 
                 icon = self.insertIcon('bat_full_01.xbm')
 
@@ -34,11 +35,13 @@ class BatteryPlugin(Plugin):
 
                 percent = int(100 / lastfull * remain)
                 if percent < 25:
-                    fg_color = self._fg_urgent
+                    self._fg_color = self._fg_urgent
                     icon = self.insertIcon('bat_empty_01.xbm')
                 elif percent < 50:
-                    fg_color = self._fg_notice
+                    self._fg_color = self._fg_notice
                     icon = self.insertIcon('bat_low_01.xbm')
+                elif percent < 101:
+                    self._fg_color = "#008700"
 
                 ac = ''
                 if ac_vals:
@@ -47,11 +50,10 @@ class BatteryPlugin(Plugin):
                     mins = math.floor(mins - (hours * 60.0))
                     ac = ' %02d:%02d' % (hours, mins)
                     icon = self.insertIcon('ac15.xbm')
-                    fg_color = self._fg_notice
+                    self._fg_color = "#FFFF00"
 
                 percent = str(percent)
-                icon_out = self.setBgColor(self.pad(self.setFgColor(icon, fg_color), 2), self._bg_light)
-                icon_out = self.setFgColor(icon_out, "#FFFF00")
+                icon_out = self.setBgColor(self.pad(self.setFgColor(icon, self._fg_color), 2), self._bg_light)
                 output = icon_out + self.pad(percent)
                 queue.put({self.__class__.__name__: output})
             except Exception as e:
